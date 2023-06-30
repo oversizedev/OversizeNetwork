@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: OversizeNetwork
+  version: 1.0.0
+servers:
+  - url: https://cdn.oversize.design
+    description: CDN
+paths:
+  /config/ads.json:
+    get:
+      tags:
+        - CDN
+      summary: Ads banners
+      operationId: getBanners
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AdBanner'
+
+components:
+  schemas:
+    AdBanner:
+      type: object
+      required:
+        - id
+        - name
+        - title
+        - subtitle
+        - path
+      properties:
+        id:
+          type: "integer"
+          example: 6443709281
+        name:
+          type: "string"
+          example: "Scale Down"
+        title:
+          type: "string"
+          example: "Control weight easily, follow the successes of every month"
+        subtitle:
+          type: "string"
+          example: "It is very difficult to reset everything"
+        path:
+          type: "string"
+          example: "scaledown"
