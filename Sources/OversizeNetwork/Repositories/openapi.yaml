@@ -1,0 +1,313 @@
+openapi: 3.0.3
+info:
+  title: OversizeStaticAPI
+  description: OversizeAPI
+  version: 1.0.0
+servers:
+  - url: https://cdn.oversize.design
+paths:
+  /config/apps-short.json:
+    get:
+      tags:
+        - app
+      summary: Fetch apps
+      operationId: fetchApps
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AppShort'
+        '404':
+          description: Apps not found
+  /config/info.json:
+    get:
+      tags:
+        - app
+      summary: Fetch info
+      operationId: fetchInfo
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Info'
+        '404':
+          description: Info not found
+  /config/apps/{appId}.json:
+    get:
+      tags:
+        - app
+      summary: Find app by ID
+      description: Returns a single app
+      operationId: fetchAppById
+      parameters:
+        - name: appId
+          in: path
+          description: ID of pet to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppDetail'
+        '404':
+          description: App not found
+  /config/ads.json:
+    get:
+      tags:
+        - app
+      summary: Fetch ads
+      operationId: fetchAds
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ad'
+        '404':
+          description: Apps not found
+components:
+  schemas:
+    Info:
+      required:
+        - "developer"
+        - "company"
+      properties:
+        developer:
+          required:
+            - "email"
+            - "name"
+            - "socialNetworks"
+            - "url"
+          properties:
+            email:
+              type: "string"
+              example: "alexander@oversize.design"
+            name:
+              type: "string"
+              example: "Alexander Romanov"
+            socialNetworks:
+              items:
+                items:
+                  $ref: '#/components/schemas/SocialNetworkLink'
+            url:
+              type: "string"
+              example: "https://romanov.cc"
+          type: "object"
+        company:
+          required:
+            - "name"
+            - "url"
+            - "cdnUrl"
+            - "email"
+            - "socialNetworks"
+            - "supportEmail"
+          properties:
+            name:
+              type: "string"
+              example: "Oversize"
+            url:
+              type: "string"
+              example: "https://oversize.design"
+            cdnUrl:
+              type: "string"
+              example: "https://cdn.oversize.design"
+            email:
+              type: "string"
+              example: "support@oversize.design"
+            supportEmail:
+              type: "string"
+              example: "support@oversize.design"
+            appStoreId:
+              type: "string"
+              example: "1459928735"
+            socialNetworks:
+              items:
+                $ref: '#/components/schemas/SocialNetworkLink'
+          type: "object"
+    SocialNetworkLink:
+      type: "object"
+      required:
+        - id
+        - title
+        - url
+        - iconUrl
+      properties:
+        title:
+          type: "string"
+          example: "facebook"
+        id:
+          type: "string"
+          example: "aromanov91"
+        url:
+          type: "string"
+          example: "https://www.facebook.com/aromanov91"
+        iconUrl:
+          type: string
+          example: "https://cdn.oversize.design/assets/icons/brands/dribbble.svg"
+    AppShort:
+      required:
+        - name
+        - title
+        - address
+        - appStoreId
+        - termsDate
+      properties:
+        name:
+          type: string
+          example: Calendar Do
+        title:
+          type: string
+          example: Add tasks to meetings
+        subtitle:
+          type: string
+          example: All your meetings on a simple list
+        description:
+          type: string
+          example: >-
+            A simple and convenient viewing of events from the calendar in the
+            form of a list of tasks with the possibility of adding subtasks to
+            events. Convenient adding new events to the calendar as in the lists
+            of tasks
+        address:
+          type: string
+          example: calendardo
+        appStoreId:
+          type: string
+          example: '1661200390'
+        termsDate:
+          type: string
+          example: '2022-12-31'
+    AppDetail:
+      required:
+        - name
+        - title
+        - subtitle
+        - address
+        - appStoreId
+        - termsDate
+        - platforms
+      properties:
+        name:
+          type: string
+          example: Calendar Do
+        title:
+          type: string
+          example: Add tasks to meetings
+        subtitle:
+          type: string
+          example: All your meetings on a simple list
+        description:
+          type: string
+          example: >-
+            A simple and convenient viewing of events from the calendar in the
+            form of a list of tasks with the possibility of adding subtasks to
+            events. Convenient adding new events to the calendar as in the lists
+            of tasks
+        address:
+          type: string
+          example: calendardo
+        appStoreId:
+          type: string
+          example: '1661200390'
+        termsDate:
+          type: string
+          example: '2022-12-31'
+        platforms:
+          properties:
+            iOS:
+              $ref: '#/components/schemas/Platform'
+            iPadOS:
+              $ref: '#/components/schemas/Platform'
+            macOS:
+              $ref: '#/components/schemas/Platform'
+            tvOS:
+              $ref: '#/components/schemas/Platform'
+            watchOS:
+              $ref: '#/components/schemas/Platform'
+            visionOS:
+              $ref: '#/components/schemas/Platform'
+    Platform:
+      type: object
+      properties:
+        blocks:
+          type: "array"
+          items:
+            $ref: '#/components/schemas/AppDetailBlock'
+    AppDetailBlock:
+      type: object
+      required:
+        - title
+        - design
+        - items
+      properties:
+        design:
+          type: string
+          example: cards
+        title:
+          type: string
+          example: Features
+        subtitle:
+          type: string
+          example: Features
+        description:
+          type: string
+          example: All data is saved in the phone or is possible synchronization with iCloud
+        color:
+          type: string
+          example: F53C6E
+        grid:
+          type: string
+          example: grid1_2
+        screenshotUrl:
+          type: string
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+        items:
+          items:
+            $ref: '#/components/schemas/AppDetailFeature'
+    AppDetailFeature:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+          example: View events from the calendar
+        description:
+          type: string
+          example: All data is saved in the phone or is possible synchronization with iCloud
+        alignment:
+          type: string
+          example: center
+        textSize:
+          type: string
+          example: small
+        screenshotUrl:
+          type: string
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+        iconUrl:
+          type: string
+          example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
+    Ad:
+      required:
+        - id
+        - priority
+      properties:
+        id:
+          type: string
+          example: 1661200390
+        priority:
+          type: integer
+          example: 1

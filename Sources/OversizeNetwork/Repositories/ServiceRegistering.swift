@@ -5,11 +5,9 @@
 
 import Factory
 import Foundation
-import OversizeServices
 
 public extension Container {
     var networkService: Factory<NetworkService> {
         self { NetworkService() }
     }
 }
-

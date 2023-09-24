@@ -1,6 +1,17 @@
 // swift-tools-version: 5.8
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+private extension PackageDescription.Target.Dependency {
+    static let openAPIRuntime: Self = .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime")
+    static let openAPIURLSession: Self = .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession")
+    static let factory: Self = .product(name: "Factory", package: "Factory")
+    static let oversizeServices: Self = .product(name: "OversizeServices", package: "OversizeServices")
+}
+
+private extension PackageDescription.Target.PluginUsage {
+    static let openAPIGenerator: Self = .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator")
+}
+
 import PackageDescription
 
 let package = Package(
@@ -9,43 +20,31 @@ let package = Package(
         .macOS(.v12), .iOS(.v15), .tvOS(.v15), .watchOS(.v8),
     ],
     products: [
-        .executable(name: "OversizeNetwork", targets: ["OversizeNetwork"]),
+        .library(
+            name: "OversizeNetwork",
+            targets: ["OversizeNetwork"]
+        ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "0.1.0")),
-        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "0.1.0")),
-        .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "0.1.0")),
+        .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "0.2.0")),
+        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "0.2.0")),
+        .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "0.2.0")),
         .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
         .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
     ],
     targets: [
-        .executableTarget(
+        .target(
             name: "OversizeNetwork",
             dependencies: [
-                .product(
-                    name: "OpenAPIRuntime",
-                    package: "swift-openapi-runtime"
-                ),
-                .product(
-                    name: "OpenAPIURLSession",
-                    package: "swift-openapi-urlsession"
-                ),
-                .product(
-                    name: "Factory",
-                    package: "Factory"
-                ),
-                .product(
-                    name: "OversizeServices",
-                    package: "OversizeServices"
-                ),
+                .openAPIRuntime,
+                .openAPIURLSession,
+                .factory,
+                .oversizeServices,
             ],
-            path: "Sources",
+            path: "./Sources/OversizeNetwork/Repositories",
             plugins: [
-                .plugin(
-                    name: "OpenAPIGenerator",
-                    package: "swift-openapi-generator"
-                )
+                .openAPIGenerator,
             ]
-        )
+        ),
     ]
 )
