@@ -46,7 +46,8 @@ public struct NetworkService {
             case .notFound:
                 return .failure(.network(type: .invalidURL))
             }
-        } catch {
+        } catch(let error) {
+            print(error)
             return .failure(.network(type: .unknown))
         }
     }

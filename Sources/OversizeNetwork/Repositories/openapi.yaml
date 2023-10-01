@@ -100,8 +100,7 @@ components:
               example: "Alexander Romanov"
             socialNetworks:
               items:
-                items:
-                  $ref: '#/components/schemas/SocialNetworkLink'
+                $ref: '#/components/schemas/SocialNetworkLink'
             url:
               type: "string"
               example: "https://romanov.cc"
@@ -112,8 +111,9 @@ components:
             - "url"
             - "cdnUrl"
             - "email"
-            - "socialNetworks"
             - "supportEmail"
+            - "appStoreId"
+            - "socialNetworks"
           properties:
             name:
               type: "string"
