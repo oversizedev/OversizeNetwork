@@ -3,7 +3,7 @@
 // NetworkService.swift, created on 30.06.2023
 //
 import OpenAPIURLSession
-import OversizeServices
+import OversizeModels
 
 public struct NetworkService {
     let client = Client(
@@ -46,7 +46,7 @@ public struct NetworkService {
             case .notFound:
                 return .failure(.network(type: .invalidURL))
             }
-        } catch(let error) {
+        } catch {
             print(error)
             return .failure(.network(type: .unknown))
         }

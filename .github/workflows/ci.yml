@@ -9,12 +9,14 @@ jobs:
 
   build-swiftpm:
     name: Build SwiftPM
-    uses: ./.github/workflows/build-swiftpm.yml
+    uses: oversizedev/GithubWorkflows/.github/workflows/build-swiftpm.yml@main
+    with:
+      package: "OversizeNetwork"
     secrets: inherit
     
   bump:
     name: Bump version
     needs: build-swiftpm
-    uses: ./.github/workflows/bump.yml
+    uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
     secrets: inherit
     

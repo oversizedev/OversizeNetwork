@@ -5,7 +5,7 @@ private extension PackageDescription.Target.Dependency {
     static let openAPIRuntime: Self = .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime")
     static let openAPIURLSession: Self = .product(name: "OpenAPIURLSession", package: "swift-openapi-urlsession")
     static let factory: Self = .product(name: "Factory", package: "Factory")
-    static let oversizeServices: Self = .product(name: "OversizeServices", package: "OversizeServices")
+    static let oversizeModels: Self = .product(name: "OversizeModels", package: "OversizeModels")
 }
 
 private extension PackageDescription.Target.PluginUsage {
@@ -26,11 +26,12 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "0.2.0")),
-        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "0.2.0")),
-        .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "0.2.0")),
+        .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "0.3.0")),
+        .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "0.3.0")),
         .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
-        .package(url: "https://github.com/oversizedev/OversizeServices.git", .upToNextMajor(from: "1.4.0")),
+        .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
+        //.package(name: "OversizeModels", path: "../OversizeModels"),
     ],
     targets: [
         .target(
@@ -39,7 +40,7 @@ let package = Package(
                 .openAPIRuntime,
                 .openAPIURLSession,
                 .factory,
-                .oversizeServices,
+                .oversizeModels,
             ],
             path: "./Sources/OversizeNetwork/Repositories",
             plugins: [
