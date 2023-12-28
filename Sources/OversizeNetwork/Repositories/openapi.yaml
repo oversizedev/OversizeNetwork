@@ -38,6 +38,21 @@ paths:
                 $ref: '#/components/schemas/Info'
         '404':
           description: Info not found
+  /config/special-offers.json:
+    get:
+      tags:
+        - app
+      summary: Fetch special offers events
+      operationId: fetchSpecialOffers
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SpecialOffers'
+        '404':
+          description: Offers not found
   /config/apps/{appId}.json:
     get:
       tags:
@@ -69,76 +84,73 @@ paths:
       operationId: fetchAds
       responses:
         '200':
-          description: Successful operation
+          description: successful operation
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ad'
+                $ref: '#/components/schemas/Ads'
         '404':
           description: Apps not found
 components:
   schemas:
     Info:
       required:
-        - "developer"
-        - "company"
+        - developer
+        - company
       properties:
         developer:
           required:
-            - "email"
-            - "name"
-            - "socialNetworks"
-            - "url"
+            - email
+            - name
+            - socialNetworks
+            - url
           properties:
             email:
-              type: "string"
-              example: "alexander@oversize.design"
+              type: string
+              example: alexander@oversize.design
             name:
-              type: "string"
-              example: "Alexander Romanov"
+              type: string
+              example: Alexander Romanov
             socialNetworks:
               items:
                 $ref: '#/components/schemas/SocialNetworkLink'
             url:
-              type: "string"
-              example: "https://romanov.cc"
-          type: "object"
+              type: string
+              example: https://romanov.cc
+          type: object
         company:
           required:
-            - "name"
-            - "url"
-            - "cdnUrl"
-            - "email"
-            - "supportEmail"
-            - "appStoreId"
-            - "socialNetworks"
+            - name
+            - url
+            - cdnUrl
+            - email
+            - socialNetworks
+            - supportEmail
           properties:
             name:
-              type: "string"
-              example: "Oversize"
+              type: string
+              example: Oversize
             url:
-              type: "string"
-              example: "https://oversize.design"
+              type: string
+              example: https://oversize.design
             cdnUrl:
-              type: "string"
-              example: "https://cdn.oversize.design"
+              type: string
+              example: https://cdn.oversize.design
             email:
-              type: "string"
-              example: "support@oversize.design"
+              type: string
+              example: support@oversize.design
             supportEmail:
-              type: "string"
-              example: "support@oversize.design"
+              type: string
+              example: support@oversize.design
             appStoreId:
-              type: "string"
-              example: "1459928735"
+              type: string
+              example: '1459928735'
             socialNetworks:
               items:
                 $ref: '#/components/schemas/SocialNetworkLink'
-          type: "object"
+          type: object
     SocialNetworkLink:
-      type: "object"
+      type: object
       required:
         - id
         - title
@@ -146,17 +158,17 @@ components:
         - iconUrl
       properties:
         title:
-          type: "string"
-          example: "facebook"
+          type: string
+          example: facebook
         id:
-          type: "string"
-          example: "aromanov91"
+          type: string
+          example: aromanov91
         url:
-          type: "string"
-          example: "https://www.facebook.com/aromanov91"
+          type: string
+          example: https://www.facebook.com/aromanov91
         iconUrl:
           type: string
-          example: "https://cdn.oversize.design/assets/icons/brands/dribbble.svg"
+          example: https://cdn.oversize.design/assets/icons/brands/dribbble.svg
     AppShort:
       required:
         - name
@@ -225,6 +237,10 @@ components:
         termsDate:
           type: string
           example: '2022-12-31'
+        termsAdditions:
+          type: array
+          items:
+            type: string
         platforms:
           properties:
             iOS:
@@ -243,7 +259,7 @@ components:
       type: object
       properties:
         blocks:
-          type: "array"
+          type: array
           items:
             $ref: '#/components/schemas/AppDetailBlock'
     AppDetailBlock:
@@ -300,14 +316,89 @@ components:
         iconUrl:
           type: string
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
-    Ad:
+    SpecialOffers:
+      type: object
+      required:
+        - offers
+      properties:
+        offers:
+          type: array
+          items:
+            $ref: '#/components/schemas/SpecialOffer'
+    SpecialOffer:
+      type: object
       required:
         - id
-        - priority
+        - title
+        - startDate
+        - endDate
       properties:
         id:
           type: string
-          example: 1661200390
+          example: "01"
+        badge:
+          type: string
+          example: Special Offer
+        title:
+          type: string
+          example: Get <salePercent>% OFF
+        headline:
+          type: string
+          example: It is very difficult to reset everything
+        description:
+          type: string
+          example: Get up to <salePercent>% off for <subscriptionName> subscription
+            and Free full access for <freeDays> days
+        imageURL:
+          type: string
+        startDate:
+          type: string
+          example: '2023-11-24T00:00:00Z'
+        endDate:
+          type: string
+          example: '2023-11-26T23:59:59Z'
+        accentColor:
+          type: string
+          example: F53C6E
+        effect:
+          type: string
+          example: snow
+          enum:
+            - snow
+        region:
+          type: array
+          items:
+            type: string
+    Ads:
+      type: object
+      required:
+        - ads
+      properties:
+        ads:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ad'
+    Ad:
+      type: object
+      required:
+        - appStoreId
+        - title
+        - description
+      properties:
+        appStoreId:
+          type: string
+          example: '6443709281'
+        title:
+          type: string
+          example: Control weight easily, follow the successes of every month
+        description:
+          type: string
+          example: Control weight easily, follow the successes of every month
+        iconURL:
+          type: string
         priority:
           type: integer
           example: 1
+        address:
+          type: string
+          example: scaledown

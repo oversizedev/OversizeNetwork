@@ -2,6 +2,7 @@
 // Copyright © 2023 Alexander Romanov
 // NetworkService.swift, created on 30.06.2023
 //
+
 import OpenAPIURLSession
 import OversizeModels
 
@@ -47,7 +48,6 @@ public struct NetworkService {
                 return .failure(.network(type: .invalidURL))
             }
         } catch {
-            print(error)
             return .failure(.network(type: .unknown))
         }
     }
@@ -78,7 +78,26 @@ public struct NetworkService {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(ads):
-                    return .success(ads)
+                    return .success(ads.ads)
+                }
+            case .undocumented:
+                return .failure(.network(type: .unexpectedStatusCode))
+            case .notFound:
+                return .failure(.network(type: .invalidURL))
+            }
+        } catch {
+            return .failure(.network(type: .unknown))
+        }
+    }
+
+    public func fetchSpecialOffers() async -> Result<[Components.Schemas.SpecialOffer], AppError> {
+        do {
+            let response = try await client.fetchSpecialOffers(.init())
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(ads):
+                    return .success(ads.offers)
                 }
             case .undocumented:
                 return .failure(.network(type: .unexpectedStatusCode))
