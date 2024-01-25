@@ -3,20 +3,33 @@
 // NetworkService.swift, created on 30.06.2023
 //
 
+import Foundation
+import OpenAPIRuntime
 import OpenAPIURLSession
 import OversizeModels
 
 public struct NetworkService {
-    let client = Client(
-        serverURL: try! Servers.server1(),
-        transport: URLSessionTransport()
-    )
 
-    public init() {}
+    /// The underlying generated client to make HTTP requests to GreetingService.
+    private let underlyingClient: any APIProtocol
+
+    /// An internal initializer used by other initializers and by tests.
+    /// - Parameter underlyingClient: The client to use to make HTTP requests.
+    init(underlyingClient: any APIProtocol) { self.underlyingClient = underlyingClient }
+
+    /// Creates a new client for GreetingService.
+    public init() {
+        self.init(
+            underlyingClient: Client(
+                serverURL: try! Servers.server1(),
+                transport: URLSessionTransport()
+            )
+        )
+    }
 
     public func fetchApps() async -> Result<[Components.Schemas.AppShort], AppError> {
         do {
-            let response = try await client.fetchApps(.init())
+            let response = try await underlyingClient.fetchApps(.init())
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
@@ -35,7 +48,7 @@ public struct NetworkService {
 
     public func fetchInfo() async -> Result<Components.Schemas.Info, AppError> {
         do {
-            let response = try await client.fetchInfo(.init())
+            let response = try await underlyingClient.fetchInfo(.init())
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
@@ -54,7 +67,7 @@ public struct NetworkService {
 
     public func fetchAppById(appId: String) async -> Result<Components.Schemas.AppDetail, AppError> {
         do {
-            let response = try await client.fetchAppById(.init(path: .init(appId: appId)))
+            let response = try await underlyingClient.fetchAppById(.init(path: .init(appId: appId)))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
@@ -73,7 +86,7 @@ public struct NetworkService {
 
     public func fetchAds() async -> Result<[Components.Schemas.Ad], AppError> {
         do {
-            let response = try await client.fetchAds(.init())
+            let response = try await underlyingClient.fetchAds(.init())
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
@@ -92,7 +105,7 @@ public struct NetworkService {
 
     public func fetchSpecialOffers() async -> Result<[Components.Schemas.SpecialOffer], AppError> {
         do {
-            let response = try await client.fetchSpecialOffers(.init())
+            let response = try await underlyingClient.fetchSpecialOffers(.init())
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
