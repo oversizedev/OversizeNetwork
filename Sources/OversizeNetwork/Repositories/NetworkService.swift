@@ -9,7 +9,6 @@ import OpenAPIURLSession
 import OversizeModels
 
 public struct NetworkService {
-
     /// The underlying generated client to make HTTP requests to GreetingService.
     private let underlyingClient: any APIProtocol
 
