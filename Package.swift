@@ -17,17 +17,20 @@ import PackageDescription
 let package = Package(
     name: "OversizeNetwork",
     platforms: [
-        .macOS(.v12), .iOS(.v15), .tvOS(.v15), .watchOS(.v8),
+        .macOS(.v12),
+        .iOS(.v15),
+        .tvOS(.v15),
+        .watchOS(.v9),
     ],
     products: [
         .library(
             name: "OversizeNetwork",
             targets: ["OversizeNetwork"]
-        )
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "1.2.1")),
-        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "1.3.2")),
+        .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "1.4.0")),
         .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "1.0.1")),
         .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.1.3")),
         .package(url: "https://github.com/oversizedev/OversizeModels.git", .upToNextMajor(from: "0.1.0")),
