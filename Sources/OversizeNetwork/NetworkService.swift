@@ -9,14 +9,10 @@ import OpenAPIURLSession
 import OversizeModels
 
 public struct NetworkService {
-    /// The underlying generated client to make HTTP requests to GreetingService.
     private let underlyingClient: any APIProtocol
 
-    /// An internal initializer used by other initializers and by tests.
-    /// - Parameter underlyingClient: The client to use to make HTTP requests.
     init(underlyingClient: any APIProtocol) { self.underlyingClient = underlyingClient }
 
-    /// Creates a new client for GreetingService.
     public init() {
         self.init(
             underlyingClient: Client(
