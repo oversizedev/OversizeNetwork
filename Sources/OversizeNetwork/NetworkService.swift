@@ -16,7 +16,7 @@ public struct NetworkService {
     public init() {
         self.init(
             underlyingClient: Client(
-                serverURL: try! Servers.server1(),
+                serverURL: try! Servers.Server1.url(),
                 transport: URLSessionTransport()
             )
         )

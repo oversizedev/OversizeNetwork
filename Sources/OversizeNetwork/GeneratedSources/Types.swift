@@ -89,6 +89,15 @@ extension APIProtocol {
 
 /// Server URLs defined in the OpenAPI document.
 public enum Servers {
+    public enum Server1 {
+        public static func url() throws -> Foundation.URL {
+            try Foundation.URL(
+                validatingOpenAPIServerURL: "https://cdn.oversize.design",
+                variables: []
+            )
+        }
+    }
+    @available(*, deprecated, renamed: "Servers.Server1.url")
     public static func server1() throws -> Foundation.URL {
         try Foundation.URL(
             validatingOpenAPIServerURL: "https://cdn.oversize.design",
@@ -317,7 +326,7 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/AppDetail/termsDate`.
             public var termsDate: Swift.String
             /// - Remark: Generated from `#/components/schemas/AppDetail/termsAdditionsPayload`.
-            @frozen public enum termsAdditionsPayloadPayload: String, Codable, Hashable, Sendable {
+            @frozen public enum termsAdditionsPayloadPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case yandexAds = "yandexAds"
                 case adMob = "adMob"
                 case firebaseAnalytics = "firebaseAnalytics"
@@ -438,7 +447,7 @@ public enum Components {
         /// - Remark: Generated from `#/components/schemas/AppDetailBlock`.
         public struct AppDetailBlock: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/AppDetailBlock/design`.
-            @frozen public enum designPayload: String, Codable, Hashable, Sendable {
+            @frozen public enum designPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case cards = "cards"
                 case cardFeatures = "cardFeatures"
             }
@@ -453,7 +462,7 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/AppDetailBlock/color`.
             public var color: Swift.String?
             /// - Remark: Generated from `#/components/schemas/AppDetailBlock/grid`.
-            @frozen public enum gridPayload: String, Codable, Hashable, Sendable {
+            @frozen public enum gridPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case grid1_2 = "grid1_2"
             }
             /// - Remark: Generated from `#/components/schemas/AppDetailBlock/grid`.
@@ -510,7 +519,7 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/AppDetailFeature/description`.
             public var description: Swift.String?
             /// - Remark: Generated from `#/components/schemas/AppDetailFeature/alignment`.
-            @frozen public enum alignmentPayload: String, Codable, Hashable, Sendable {
+            @frozen public enum alignmentPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case left = "left"
                 case center = "center"
                 case right = "right"
@@ -518,7 +527,7 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/AppDetailFeature/alignment`.
             public var alignment: Components.Schemas.AppDetailFeature.alignmentPayload?
             /// - Remark: Generated from `#/components/schemas/AppDetailFeature/textSize`.
-            @frozen public enum textSizePayload: String, Codable, Hashable, Sendable {
+            @frozen public enum textSizePayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case small = "small"
                 case medium = "medium"
                 case large = "large"
@@ -598,7 +607,7 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/SpecialOffer/accentColor`.
             public var accentColor: Swift.String?
             /// - Remark: Generated from `#/components/schemas/SpecialOffer/effect`.
-            @frozen public enum effectPayload: String, Codable, Hashable, Sendable {
+            @frozen public enum effectPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case snow = "snow"
             }
             /// - Remark: Generated from `#/components/schemas/SpecialOffer/effect`.
@@ -822,6 +831,14 @@ public enum Operations {
             ///
             /// HTTP response code: `404 notFound`.
             case notFound(Operations.fetchApps.Output.NotFound)
+            /// Apps not found
+            ///
+            /// - Remark: Generated from `#/paths//config/apps-short.json/get(fetchApps)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            public static var notFound: Self {
+                .notFound(.init())
+            }
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
@@ -959,6 +976,14 @@ public enum Operations {
             ///
             /// HTTP response code: `404 notFound`.
             case notFound(Operations.fetchInfo.Output.NotFound)
+            /// Info not found
+            ///
+            /// - Remark: Generated from `#/paths//config/info.json/get(fetchInfo)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            public static var notFound: Self {
+                .notFound(.init())
+            }
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
@@ -1096,6 +1121,14 @@ public enum Operations {
             ///
             /// HTTP response code: `404 notFound`.
             case notFound(Operations.fetchSpecialOffers.Output.NotFound)
+            /// Offers not found
+            ///
+            /// - Remark: Generated from `#/paths//config/special-offers.json/get(fetchSpecialOffers)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            public static var notFound: Self {
+                .notFound(.init())
+            }
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
@@ -1255,6 +1288,14 @@ public enum Operations {
             ///
             /// HTTP response code: `404 notFound`.
             case notFound(Operations.fetchAppById.Output.NotFound)
+            /// App not found
+            ///
+            /// - Remark: Generated from `#/paths//config/apps/{appId}.json/get(fetchAppById)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            public static var notFound: Self {
+                .notFound(.init())
+            }
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
@@ -1392,6 +1433,14 @@ public enum Operations {
             ///
             /// HTTP response code: `404 notFound`.
             case notFound(Operations.fetchAds.Output.NotFound)
+            /// Apps not found
+            ///
+            /// - Remark: Generated from `#/paths//config/ads.json/get(fetchAds)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            public static var notFound: Self {
+                .notFound(.init())
+            }
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
