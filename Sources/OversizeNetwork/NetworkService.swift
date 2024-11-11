@@ -8,7 +8,7 @@ import OpenAPIRuntime
 import OpenAPIURLSession
 import OversizeModels
 
-public struct NetworkService {
+public struct NetworkService: Sendable {
     private let underlyingClient: any APIProtocol
 
     init(underlyingClient: any APIProtocol) { self.underlyingClient = underlyingClient }
