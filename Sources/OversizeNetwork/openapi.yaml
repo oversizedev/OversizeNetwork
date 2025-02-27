@@ -1,32 +1,352 @@
 openapi: 3.1.0
 info:
-  title: OversizeStaticAPI
-  description: OversizeAPI
-  version: 1.0.0
+  title: OversizeAPI
+  version: 0.5.0
+  description: API specification for Oversize applications
+  contact:
+    name: Oversize Team
+    url: https://oversize.app
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
 servers:
-  - url: https://cdn.oversize.design
+  - url: https://api.oversize.app
+    description: API url
+  - url: https://test.api.oversize.app
+    description: Test API url
+security:
+  - ApiKeyAuth: []
 paths:
-  /config/apps-short.json:
+  /v1/apps:
     get:
+      operationId: getApps
+      summary: Retrieve applications
+      description: Get all app
       tags:
-        - app
-      summary: Fetch apps
-      operationId: fetchApps
+        - apps
+      security:
+        - ApiKeyAuth: []
       responses:
         '200':
-          description: Successful operation
+          description: A success response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/AppShort'
+                  $ref: '#/components/schemas/App'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}:
+    get:
+      operationId: getApp
+      summary: Retrieve application
+      description: Get App Information
+      tags:
+        - apps
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned feature
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
         '404':
-          description: Apps not found
-  /config/info.json:
+          description: Feature not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: App not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}/features:
+    get:
+      operationId: getAppFeatures
+      summary: Retrieve application features
+      description: Get all features associated with a specific application
+      tags:
+        - features
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned features
+          schema:
+            type: integer
+            example: 1
+        - name: filter
+          required: false
+          in: query
+          description: Filter features
+          schema:
+            type: string
+            enum:
+              - premium
+              - onboarding
+            example: premium
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application features not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}/ads:
+    get:
+      operationId: getAppAds
+      summary: Retrieve application ads
+      description: Get all ads features associated with a specific application
+      tags:
+        - ads
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned features
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ad'
+        '404':
+          description: Application ads not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application ads not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}/ad:
+    get:
+      operationId: getAppAd
+      summary: Retrieve application ad
+      description: Get ad associated with a specific application
+      tags:
+        - ads
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned ad
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ad'
+        '404':
+          description: Application ad not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application ad not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}/app-store/productIds:
+    get:
+      operationId: GetAppStoreProductIds
+      summary: Retrieve application App Store products ids
+      description: Get all subscription ids associated with a specific application
+      tags:
+        - apps
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned features
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/features/{id}:
+    get:
+      operationId: getAppFeature
+      summary: Retrieve application features
+      description: Get all features associated with a specific application
+      tags:
+        - features
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned feature
+          schema:
+            type: integer
+            example: 1
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        '404':
+          description: Feature not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: App feature not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/sale-offers:
+    get:
+      operationId: getSaleOffers
+      summary: Retrieve StoreKit offers
+      description: Get all sale offers
+      tags:
+        - appStore
+      security:
+        - ApiKeyAuth: []
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SaleOffer'
+  /v1/infos:
     get:
       tags:
-        - app
+        - cdn
       summary: Fetch info
       operationId: fetchInfo
       responses:
@@ -36,188 +356,55 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Info'
-        '404':
-          description: Info not found
-  /config/special-offers.json:
+  /v1/health-check:
     get:
+      summary: Health Check
+      description: Endpoint to check the health of the service
       tags:
-        - app
-      summary: Fetch special offers events
-      operationId: fetchSpecialOffers
+        - other
       responses:
         '200':
-          description: Successful operation
+          description: Service is healthy
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SpecialOffers'
-        '404':
-          description: Offers not found
-  /config/apps/{appId}.json:
-    get:
-      tags:
-        - app
-      summary: Find app by ID
-      description: Returns a single app
-      operationId: fetchAppById
-      parameters:
-        - name: appId
-          in: path
-          description: ID of pet to return
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: successful operation
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum:
+                      - up
+                      - down
+                    example: up
+        '500':
+          description: Service is not healthy
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AppDetail'
-        '404':
-          description: App not found
-  /config/ads.json:
-    get:
-      tags:
-        - app
-      summary: Fetch ads
-      operationId: fetchAds
-      responses:
-        '200':
-          description: successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ads'
-        '404':
-          description: Apps not found
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: down
 components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
   schemas:
-    Info:
-      required:
-        - developer
-        - company
-      properties:
-        developer:
-          required:
-            - email
-            - name
-            - socialNetworks
-            - url
-          properties:
-            email:
-              type: string
-              example: alexander@oversize.design
-            name:
-              type: string
-              example: Alexander Romanov
-            socialNetworks:
-              items:
-                $ref: '#/components/schemas/SocialNetworkLink'
-            url:
-              type: string
-              format: uri
-              example: https://romanov.cc
-          type: object
-        company:
-          required:
-            - name
-            - url
-            - cdnUrl
-            - email
-            - socialNetworks
-            - supportEmail
-          properties:
-            name:
-              type: string
-              example: Oversize
-            url:
-              type: string
-              format: uri
-              example: https://oversize.design
-            cdnUrl:
-              type: string
-              format: uri
-              example: https://cdn.oversize.design
-            email:
-              type: string
-              example: support@oversize.design
-            supportEmail:
-              type: string
-              example: support@oversize.design
-            appStoreId:
-              type: string
-              example: '1459928735'
-            socialNetworks:
-              items:
-                $ref: '#/components/schemas/SocialNetworkLink'
-          type: object
-    SocialNetworkLink:
-      type: object
+    App:
       required:
         - id
-        - title
-        - url
-        - iconUrl
-      properties:
-        title:
-          type: string
-          example: facebook
-        id:
-          type: string
-          example: aromanov91
-        url:
-          type: string
-          format: uri
-          example: https://www.facebook.com/aromanov91
-        iconUrl:
-          type: string
-          format: uri
-          example: https://cdn.oversize.design/assets/icons/brands/dribbble.svg
-    AppShort:
-      required:
-        - name
-        - title
-        - address
-        - appStoreId
-        - termsDate
-      properties:
-        name:
-          type: string
-          example: Calendar Do
-        title:
-          type: string
-          example: Add tasks to meetings
-        subtitle:
-          type: string
-          example: All your meetings on a simple list
-        description:
-          type: string
-          example: >-
-            A simple and convenient viewing of events from the calendar in the
-            form of a list of tasks with the possibility of adding subtasks to
-            events. Convenient adding new events to the calendar as in the lists
-            of tasks
-        address:
-          type: string
-          example: calendardo
-        appStoreId:
-          type: string
-          example: '1661200390'
-        termsDate:
-          type: string
-          example: '2022-12-31'
-          format: date-time
-    AppDetail:
-      required:
         - name
         - title
         - subtitle
         - address
-        - appStoreId
         - termsDate
-        - platforms
       properties:
+        id:
+          type: integer
+          example: 1661200390
         name:
           type: string
           example: Calendar Do
@@ -229,17 +416,10 @@ components:
           example: All your meetings on a simple list
         description:
           type: string
-          example: >-
-            A simple and convenient viewing of events from the calendar in the
-            form of a list of tasks with the possibility of adding subtasks to
-            events. Convenient adding new events to the calendar as in the lists
-            of tasks
+          example: A simple and convenient viewing of events from the calendar in the form of a list of tasks with the possibility of adding subtasks to events. Convenient adding new events to the calendar as in the lists of tasks
         address:
           type: string
           example: calendardo
-        appStoreId:
-          type: string
-          example: '1661200390'
         termsDate:
           type: string
           example: '2022-12-31'
@@ -248,111 +428,88 @@ components:
           type: array
           items:
             type: string
-            enum:
-              - yandexAds
-              - adMob
-              - firebaseAnalytics
-        platforms:
-          properties:
-            iOS:
-              $ref: '#/components/schemas/Platform'
-            iPadOS:
-              $ref: '#/components/schemas/Platform'
-            macOS:
-              $ref: '#/components/schemas/Platform'
-            tvOS:
-              $ref: '#/components/schemas/Platform'
-            watchOS:
-              $ref: '#/components/schemas/Platform'
-            visionOS:
-              $ref: '#/components/schemas/Platform'
-    Platform:
-      type: object
-      properties:
-        blocks:
-          type: array
-          items:
-            $ref: '#/components/schemas/AppDetailBlock'
-    AppDetailBlock:
+    Feature:
       type: object
       required:
+        - id
         - title
-        - design
-        - items
+        - textAlignment
+        - textSize
       properties:
-        design:
-          type: string
-          example: cards
-          enum:
-            - cards
-            - cardFeatures
+        id:
+          type: integer
+          description: Computed identifier from image, title, and subtitle
         title:
           type: string
-          example: Features
+          description: Title of the store feature
+          example: Smart Weather Detection
         subtitle:
           type: string
-          example: Features
+          description: Subtitle of the store feature
+          example: Real-time weather updates
         description:
           type: string
-          example: All data is saved in the phone or is possible synchronization with iCloud
-        color:
-          type: string
-          example: F53C6E
-        grid:
-          type: string
-          example: grid1_2
-          enum:
-            - grid1_2
-        screenshotUrl:
-          type: string
-          format: uri
-          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
-        items:
-          items:
-            $ref: '#/components/schemas/AppDetailFeature'
-    AppDetailFeature:
-      type: object
-      required:
-        - title
-      properties:
-        title:
-          type: string
-          example: View events from the calendar
-        description:
-          type: string
-          example: All data is saved in the phone or is possible synchronization with iCloud
-        alignment:
-          type: string
-          example: center
-          enum:
-            - left
-            - center
-            - right
+          example: Get instant notifications about weather changes
         textSize:
           type: string
-          example: small
           enum:
             - small
             - medium
             - large
-        screenshotUrl:
+          example: medium
+          description: Size of the text content
+        textAlignment:
           type: string
-          format: uri
-          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+          enum:
+            - leading
+            - center
+            - trailing
+          example: center
+          description: Alignment of the text content
         iconUrl:
           type: string
-          format: uri
+          format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
-    SpecialOffers:
+          description: URL for the feature icon
+        screenshotUrl:
+          type: string
+          format: url
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+          description: URL for the feature screenshot
+        screenshotAlignment:
+          type: string
+          enum:
+            - top
+            - bottom
+          example: top
+          description: Vertical alignment of the screenshot
+        backgroundColor:
+          type: string
+          example: ffffff
+          description: Background color value in hex format without
+    Ad:
       type: object
       required:
-        - offers
+        - id
+        - title
+        - description
       properties:
-        offers:
-          type: array
-          items:
-            $ref: '#/components/schemas/SpecialOffer'
-    SpecialOffer:
+        id:
+          type: integer
+          example: 6443709281
+        title:
+          type: string
+          example: Control weight easily, follow the successes of every month
+        description:
+          type: string
+          example: Control weight easily, follow the successes of every month
+        iconURL:
+          type: string
+          format: url
+        priority:
+          type: integer
+          example: 1
+    SaleOffer:
       type: object
       required:
         - id
@@ -361,8 +518,8 @@ components:
         - endDate
       properties:
         id:
-          type: string
-          example: "01"
+          type: integer
+          example: 1
         badge:
           type: string
           example: Special Offer
@@ -374,11 +531,10 @@ components:
           example: It is very difficult to reset everything
         description:
           type: string
-          example: Get up to <salePercent>% off for <subscriptionName> subscription
-            and Free full access for <freeDays> days
+          example: Get up to <salePercent>% off for <subscriptionName> subscription and Free full access for <freeDays> days
         imageURL:
           type: string
-          format: uri
+          format: url
         startDate:
           type: string
           example: '2023-11-24T00:00:00Z'
@@ -399,37 +555,80 @@ components:
           type: array
           items:
             type: string
-    Ads:
+    SocialNetworkLink:
       type: object
       required:
-        - ads
-      properties:
-        ads:
-          type: array
-          items:
-            $ref: '#/components/schemas/Ad'
-    Ad:
-      type: object
-      required:
-        - appStoreId
+        - id
         - title
-        - description
+        - url
+        - iconUrl
       properties:
-        appStoreId:
-          type: string
-          example: '6443709281'
         title:
           type: string
-          example: Control weight easily, follow the successes of every month
-        description:
+          example: facebook
+        id:
           type: string
-          example: Control weight easily, follow the successes of every month
-        iconURL:
+          example: aromanov91
+        url:
           type: string
-          format: uri
-        priority:
-          type: integer
-          example: 1
-        address:
+          example: https://www.facebook.com/aromanov91
+        iconUrl:
           type: string
-          example: scaledown
+          example: https://cdn.oversize.design/assets/icons/brands/dribbble.svg
+    DeveloperInfo:
+      required:
+        - email
+        - name
+        - socialNetworks
+        - url
+      properties:
+        email:
+          type: string
+          example: alexander@oversize.app
+        name:
+          type: string
+          example: Alexander Romanov
+        socialNetworks:
+          items:
+            $ref: '#/components/schemas/SocialNetworkLink'
+        url:
+          type: string
+          example: https://romanov.cc
+      type: object
+    CompanyInfo:
+      required:
+        - name
+        - url
+        - email
+        - socialNetworks
+        - supportEmail
+      properties:
+        name:
+          type: string
+          example: Oversize
+        url:
+          type: string
+          format: url
+          example: https://oversize.app
+        email:
+          type: string
+          example: support@oversize.design
+        supportEmail:
+          type: string
+          example: support@oversize.design
+        appStoreId:
+          type: string
+          example: '1459928735'
+        socialNetworks:
+          items:
+            $ref: '#/components/schemas/SocialNetworkLink'
+      type: object
+    Info:
+      required:
+        - developer
+        - company
+      properties:
+        developer:
+          $ref: '#/components/schemas/DeveloperInfo'
+        company:
+          $ref: '#/components/schemas/CompanyInfo'
