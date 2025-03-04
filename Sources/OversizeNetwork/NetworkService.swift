@@ -9,9 +9,9 @@ import OpenAPIURLSession
 import OversizeModels
 
 public struct NetworkService: Sendable {
-    private let underlyingClient: any APIProtocol
+    private let client: any APIProtocol
 
-    init(underlyingClient: any APIProtocol) { self.underlyingClient = underlyingClient }
+    init(underlyingClient: any APIProtocol) { client = underlyingClient }
 
     public init() {
         self.init(
@@ -22,19 +22,17 @@ public struct NetworkService: Sendable {
         )
     }
 
-    public func fetchApps() async -> Result<[Components.Schemas.AppShort], AppError> {
+    public func fetchApps() async -> Result<[Components.Schemas.App], AppError> {
         do {
-            let response = try await underlyingClient.fetchApps(.init())
+            let response = try await client.getApps()
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(apps):
                     return .success(apps)
                 }
-            case .undocumented:
-                return .failure(.network(type: .unexpectedStatusCode))
-            case .notFound:
-                return .failure(.network(type: .invalidURL))
+            default:
+                return .failure(.network(type: .unknown))
             }
         } catch {
             return .failure(.network(type: .unknown))
@@ -43,74 +41,117 @@ public struct NetworkService: Sendable {
 
     public func fetchInfo() async -> Result<Components.Schemas.Info, AppError> {
         do {
-            let response = try await underlyingClient.fetchInfo(.init())
+            let response = try await client.fetchInfo(.init())
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(info):
                     return .success(info)
                 }
-            case .undocumented:
-                return .failure(.network(type: .unexpectedStatusCode))
-            case .notFound:
-                return .failure(.network(type: .invalidURL))
+            default:
+                return .failure(.network(type: .unknown))
             }
         } catch {
             return .failure(.network(type: .unknown))
         }
     }
 
-    public func fetchAppById(appId: String) async -> Result<Components.Schemas.AppDetail, AppError> {
+    public func fetchApp(appId: Int) async -> Result<Components.Schemas.App, AppError> {
         do {
-            let response = try await underlyingClient.fetchAppById(.init(path: .init(appId: appId)))
+            let response = try await client.getApp(.init(path: .init(id: appId)))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(info):
                     return .success(info)
                 }
-            case .undocumented:
-                return .failure(.network(type: .unexpectedStatusCode))
-            case .notFound:
-                return .failure(.network(type: .invalidURL))
+            default:
+                return .failure(.network(type: .unknown))
             }
         } catch {
             return .failure(.network(type: .unknown))
         }
     }
 
-    public func fetchAds() async -> Result<[Components.Schemas.Ad], AppError> {
+    public func fetchAds(appId: Int) async -> Result<[Components.Schemas.Ad], AppError> {
         do {
-            let response = try await underlyingClient.fetchAds(.init())
+            let response = try await client.getAppAds(.init(path: .init(id: appId)))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(ads):
-                    return .success(ads.ads)
+                    return .success(ads)
                 }
-            case .undocumented:
-                return .failure(.network(type: .unexpectedStatusCode))
-            case .notFound:
-                return .failure(.network(type: .invalidURL))
+            default:
+                return .failure(.network(type: .unknown))
             }
         } catch {
             return .failure(.network(type: .unknown))
         }
     }
 
-    public func fetchSpecialOffers() async -> Result<[Components.Schemas.SpecialOffer], AppError> {
+    public func fetchAd(appId: Int) async -> Result<Components.Schemas.Ad, AppError> {
         do {
-            let response = try await underlyingClient.fetchSpecialOffers(.init())
+            let response = try await client.getAppAd(.init(path: .init(id: appId)))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
                 case let .json(ads):
-                    return .success(ads.offers)
+                    return .success(ads)
+                }
+            default:
+                return .failure(.network(type: .unknown))
+            }
+        } catch {
+            return .failure(.network(type: .unknown))
+        }
+    }
+
+    public func fetchSpecialOffers() async -> Result<[Components.Schemas.SaleOffer], AppError> {
+        do {
+            let response = try await client.getSaleOffers()
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(offers):
+                    return .success(offers)
                 }
             case .undocumented:
                 return .failure(.network(type: .unexpectedStatusCode))
-            case .notFound:
-                return .failure(.network(type: .invalidURL))
+            }
+        } catch {
+            return .failure(.network(type: .unknown))
+        }
+    }
+
+    public func fetchAppStoreProductIds(appId: Int) async -> Result<[String], AppError> {
+        do {
+            let response = try await client.GetAppStoreProductIds(.init(path: .init(id: appId)))
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(productIds):
+                    return .success(productIds)
+                }
+            default:
+                return .failure(.network(type: .unexpectedStatusCode))
+            }
+        } catch {
+            return .failure(.network(type: .unknown))
+        }
+    }
+
+    public func fetchPremiumFeatures(appId: Int) async -> Result<[Components.Schemas.Feature], AppError> {
+        do {
+            let response = try await client.getAppFeatures(.init(path: .init(id: appId), query: .init(filter: .premium)))
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(productIds):
+                    return .success(productIds)
+                }
+            default:
+                return .failure(.network(type: .unexpectedStatusCode))
             }
         } catch {
             return .failure(.network(type: .unknown))
