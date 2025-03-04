@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 0.5.0
+  version: 0.5.1
   description: API specification for Oversize applications
   contact:
     name: Oversize Team
@@ -449,6 +449,7 @@ components:
           example: Real-time weather updates
         description:
           type: string
+          description: Description of the store feature
           example: Get instant notifications about weather changes
         textSize:
           type: string
@@ -467,6 +468,11 @@ components:
           example: center
           description: Alignment of the text content
         iconUrl:
+          type: string
+          format: url
+          example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
+          description: URL for the feature icon
+        illustrationUrl:
           type: string
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
