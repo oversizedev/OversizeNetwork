@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 0.5.1
+  version: 0.6.0
   description: API specification for Oversize applications
   contact:
     name: Oversize Team
@@ -106,15 +106,29 @@ paths:
           schema:
             type: integer
             example: 1
-        - name: filter
+        - name: context
           required: false
           in: query
-          description: Filter features
+          description: Filter features by context
           schema:
             type: string
             enum:
-              - premium
+              - paywall
               - onboarding
+            example: paywall
+        - name: platform
+          required: false
+          in: query
+          description: Filter features by platform
+          schema:
+            type: string
+            enum:
+              - iOS
+              - macOS
+              - tvOS
+              - watchOS
+              - visionOS
+              - web
             example: premium
       responses:
         '200':
@@ -346,7 +360,7 @@ paths:
   /v1/infos:
     get:
       tags:
-        - cdn
+        - infos
       summary: Fetch info
       operationId: fetchInfo
       responses:
@@ -403,7 +417,7 @@ components:
         - termsDate
       properties:
         id:
-          type: integer
+          type: string
           example: 1661200390
         name:
           type: string
