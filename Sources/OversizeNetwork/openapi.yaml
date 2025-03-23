@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 0.5.1
+  version: 0.8.0
   description: API specification for Oversize applications
   contact:
     name: Oversize Team
@@ -35,6 +35,16 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/App'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
         '500':
           description: Internal server error
           content:
@@ -60,7 +70,7 @@ paths:
           in: path
           description: The application id used in the returned feature
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         '200':
@@ -104,18 +114,32 @@ paths:
           in: path
           description: The application id used in the returned features
           schema:
-            type: integer
-            example: 1
-        - name: filter
+            type: string
+            example: 10000000
+        - name: context
           required: false
           in: query
-          description: Filter features
+          description: Filter features by context
           schema:
             type: string
             enum:
-              - premium
+              - paywall
               - onboarding
-            example: premium
+            example: paywall
+        - name: platform
+          required: false
+          in: query
+          description: Filter features by platform
+          schema:
+            type: string
+            enum:
+              - iOS
+              - macOS
+              - tvOS
+              - watchOS
+              - visionOS
+              - web
+            example: iOS
       responses:
         '200':
           description: A success response
@@ -125,6 +149,66 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Feature'
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application features not found
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+  /v1/apps/{id}/features/sections:
+    get:
+      operationId: getAppFeaturesSections
+      summary: Retrieve application features sections
+      description: Get all features associated with a specific application
+      tags:
+        - features
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The application id used in the returned feature
+          schema:
+            type: string
+            example: 1
+        - name: platform
+          required: false
+          in: query
+          description: Filter features by platform
+          schema:
+            type: string
+            enum:
+              - iOS
+              - macOS
+              - tvOS
+              - watchOS
+              - visionOS
+              - web
+            example: iOS
+      responses:
+        '200':
+          description: A success response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Section'
         '404':
           description: Application not found
           content:
@@ -160,7 +244,7 @@ paths:
           in: path
           description: The application id used in the returned features
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         '200':
@@ -206,7 +290,7 @@ paths:
           in: path
           description: The application id used in the returned ad
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         '200':
@@ -250,7 +334,7 @@ paths:
           in: path
           description: The application id used in the returned features
           schema:
-            type: integer
+            type: string
             example: 1
       responses:
         '200':
@@ -296,8 +380,8 @@ paths:
           in: path
           description: The application id used in the returned feature
           schema:
-            type: integer
-            example: 1
+            type: string
+            example: 1000000
       responses:
         '200':
           description: A success response
@@ -343,10 +427,20 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/SaleOffer'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
   /v1/infos:
     get:
       tags:
-        - cdn
+        - infos
       summary: Fetch info
       operationId: fetchInfo
       responses:
@@ -356,10 +450,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Info'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
   /v1/health-check:
     get:
       summary: Health Check
       description: Endpoint to check the health of the service
+      operationId: getHealthCheck
       tags:
         - other
       responses:
@@ -376,6 +481,16 @@ paths:
                       - up
                       - down
                     example: up
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Bad request
         '500':
           description: Service is not healthy
           content:
@@ -393,6 +508,24 @@ components:
       in: header
       name: X-API-Key
   schemas:
+    Platform:
+      type: object
+      required:
+        - id
+        - title
+      properties:
+        id:
+          type: string
+          enum:
+            - iOS
+            - macOS
+            - tvOS
+            - watchOS
+            - visionOS
+            - web
+          example: iOS
+        title:
+          type: string
     App:
       required:
         - id
@@ -403,8 +536,12 @@ components:
         - termsDate
       properties:
         id:
-          type: integer
+          type: string
           example: 1661200390
+        iconUrl:
+          type: string
+          format: url
+          example: https://oversize.app/assets/icons/apps/calendardo.png
         name:
           type: string
           example: Calendar Do
@@ -428,6 +565,9 @@ components:
           type: array
           items:
             type: string
+        platforms:
+          items:
+            $ref: '#/components/schemas/Platform'
     Feature:
       type: object
       required:
@@ -493,6 +633,45 @@ components:
           type: string
           example: ffffff
           description: Background color value in hex format without
+    Section:
+      type: object
+      required:
+        - id
+        - title
+        - type
+        - items
+      properties:
+        id:
+          type: integer
+          example: 100
+        type:
+          type: string
+          example: cards
+          enum:
+            - grid
+            - list
+        title:
+          type: string
+          example: Features
+        subtitle:
+          type: string
+          example: Amazing features
+        description:
+          type: string
+          example: All data is saved in the phone or is possible synchronization with iCloud
+        color:
+          type: string
+          example: F53C6E
+        gridColumns:
+          type: integer
+          example: 1
+        screenshotUrl:
+          type: string
+          format: uri
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+        features:
+          items:
+            $ref: '#/components/schemas/Feature'
     Ad:
       type: object
       required:
@@ -561,7 +740,7 @@ components:
           type: array
           items:
             type: string
-    SocialNetworkLink:
+    SocialNetwork:
       type: object
       required:
         - id
@@ -581,7 +760,7 @@ components:
         iconUrl:
           type: string
           example: https://cdn.oversize.design/assets/icons/brands/dribbble.svg
-    DeveloperInfo:
+    Developer:
       required:
         - email
         - name
@@ -596,12 +775,12 @@ components:
           example: Alexander Romanov
         socialNetworks:
           items:
-            $ref: '#/components/schemas/SocialNetworkLink'
+            $ref: '#/components/schemas/SocialNetwork'
         url:
           type: string
           example: https://romanov.cc
       type: object
-    CompanyInfo:
+    Company:
       required:
         - name
         - url
@@ -627,7 +806,7 @@ components:
           example: '1459928735'
         socialNetworks:
           items:
-            $ref: '#/components/schemas/SocialNetworkLink'
+            $ref: '#/components/schemas/SocialNetwork'
       type: object
     Info:
       required:
@@ -635,6 +814,6 @@ components:
         - company
       properties:
         developer:
-          $ref: '#/components/schemas/DeveloperInfo'
+          $ref: '#/components/schemas/Developer'
         company:
-          $ref: '#/components/schemas/CompanyInfo'
+          $ref: '#/components/schemas/Company'
