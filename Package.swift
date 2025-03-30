@@ -19,12 +19,7 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeModels", path: "../OversizeModels"),
 ]
 
-
-var dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
-
-if ProcessInfo.processInfo.environment["BUILD_MODE"] == "DEV" {
-    dependencies = localDependencies
-}
+let dependencies: [PackageDescription.Package.Dependency] = localDependencies
 
 let package = Package(
     name: "OversizeNetwork",
