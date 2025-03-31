@@ -56,7 +56,7 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchApp(appId: Int) async -> Result<Components.Schemas.App, AppError> {
+    public func fetchApp(appId: String) async -> Result<Components.Schemas.App, AppError> {
         do {
             let response = try await client.getApp(.init(path: .init(id: appId)))
             switch response {
@@ -73,7 +73,7 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchAds(appId: Int) async -> Result<[Components.Schemas.Ad], AppError> {
+    public func fetchAds(appId: String) async -> Result<[Components.Schemas.Ad], AppError> {
         do {
             let response = try await client.getAppAds(.init(path: .init(id: appId)))
             switch response {
@@ -90,7 +90,7 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchAd(appId: Int) async -> Result<Components.Schemas.Ad, AppError> {
+    public func fetchAd(appId: String) async -> Result<Components.Schemas.Ad, AppError> {
         do {
             let response = try await client.getAppAd(.init(path: .init(id: appId)))
             switch response {
@@ -116,7 +116,7 @@ public struct NetworkService: Sendable {
                 case let .json(offers):
                     return .success(offers)
                 }
-            case .undocumented:
+            case .undocumented, .badRequest:
                 return .failure(.network(type: .unexpectedStatusCode))
             }
         } catch {
@@ -124,7 +124,7 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchAppStoreProductIds(appId: Int) async -> Result<[String], AppError> {
+    public func fetchAppStoreProductIds(appId: String) async -> Result<[String], AppError> {
         do {
             let response = try await client.GetAppStoreProductIds(.init(path: .init(id: appId)))
             switch response {
@@ -141,9 +141,26 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchPremiumFeatures(appId: Int) async -> Result<[Components.Schemas.Feature], AppError> {
+    public func fetchAppStoreProducts(appId: String) async -> Result<Components.Schemas.AppStoreProducts, AppError> {
         do {
-            let response = try await client.getAppFeatures(.init(path: .init(id: appId), query: .init(filter: .premium)))
+            let response = try await client.GetAppStoreProducts(.init(path: .init(id: appId)))
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(productIds):
+                    return .success(productIds)
+                }
+            default:
+                return .failure(.network(type: .unexpectedStatusCode))
+            }
+        } catch {
+            return .failure(.network(type: .unknown))
+        }
+    }
+
+    public func fetchPremiumFeatures(appId: String) async -> Result<[Components.Schemas.Feature], AppError> {
+        do {
+            let response = try await client.getAppFeatures(.init(path: .init(id: appId), query: .init(context: .paywall)))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
