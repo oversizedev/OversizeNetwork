@@ -19,7 +19,7 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeModels", path: "../OversizeModels"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = localDependencies
+let dependencies: [PackageDescription.Package.Dependency] = remoteDependencies
 
 let package = Package(
     name: "OversizeNetwork",
