@@ -1,121 +1,91 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 0.9.0
-  description: API specification for Oversize applications
+  version: 1.1.0
+  description: |-
+    # OversizeAPI
+
+    A comprehensive API for Oversize applications that provides access to apps, features, ads,
+    and other resources. This API uses consistent patterns and follows RESTful principles.
+
+    ## Pagination
+    List endpoints support pagination with `page` and `limit` query parameters.
   contact:
     name: Oversize Team
     url: https://oversize.app
+    email: support@oversize.app
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
 servers:
   - url: https://api.oversize.app
-    description: API url
+    description: Production API
   - url: https://test.api.oversize.app
-    description: Test API url
+    description: Test API
 security:
   - ApiKeyAuth: []
+tags:
+  - name: apps
+    description: Application-related endpoints
+  - name: features
+    description: Feature-related endpoints
+  - name: ads
+    description: Advertisement-related endpoints
+  - name: in-app-purchases
+    description: App Store In-AppPurchases integration endpoints
+  - name: infos
+    description: Information-related endpoints
+  - name: systems
+    description: System-related endpoints like health checks
 paths:
   /v1/apps:
     get:
+      summary: List all applications
+      description: Retrieves a list of all applications
       operationId: getApps
-      summary: Retrieve applications
-      description: Get all app
       tags:
         - apps
-      security:
-        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/Platforms'
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/App'
+          $ref: '#/components/responses/AppsResponse'
         '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
+          $ref: '#/components/responses/BadRequestResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}:
     get:
+      summary: Get App Information
+      description: Retrieve application
       operationId: getApp
-      summary: Retrieve application
-      description: Get App Information
       tags:
         - apps
       security:
         - ApiKeyAuth: []
       parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned feature
-          schema:
-            type: string
-            example: 1
+        - $ref: '#/components/parameters/AppId'
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/App'
+          $ref: '#/components/responses/AppResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
         '404':
-          description: Feature not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: App not found
+          $ref: '#/components/responses/NotFoundResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/features:
     get:
       operationId: getAppFeatures
       summary: Retrieve application features
       description: Get all features associated with a specific application
       tags:
-        - features
+        - apps
       security:
         - ApiKeyAuth: []
       parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned features
-          schema:
-            type: string
-            example: 10000000
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Platforms'
         - name: context
           required: false
           in: query
@@ -126,391 +96,156 @@ paths:
               - paywall
               - onboarding
             example: paywall
-        - name: platform
-          required: false
-          in: query
-          description: Filter features by platform
-          schema:
-            type: string
-            enum:
-              - iOS
-              - macOS
-              - tvOS
-              - watchOS
-              - visionOS
-              - web
-            example: iOS
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Feature'
+          $ref: '#/components/responses/FeaturesResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
         '404':
-          description: Application not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application features not found
+          $ref: '#/components/responses/NotFoundResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/features/sections:
     get:
       operationId: getAppFeaturesSections
       summary: Retrieve application features sections
       description: Get all features associated with a specific application
       tags:
-        - features
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned feature
-          schema:
-            type: string
-            example: 1
-        - name: platform
-          required: false
-          in: query
-          description: Filter features by platform
-          schema:
-            type: string
-            enum:
-              - iOS
-              - macOS
-              - tvOS
-              - watchOS
-              - visionOS
-              - web
-            example: iOS
-      responses:
-        '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Section'
-        '404':
-          description: Application not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application features not found
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-  /v1/apps/{id}/ads:
-    get:
-      operationId: getAppAds
-      summary: Retrieve application ads
-      description: Get all ads features associated with a specific application
-      tags:
-        - ads
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned features
-          schema:
-            type: string
-            example: 1
-      responses:
-        '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Ad'
-        '404':
-          description: Application ads not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application ads not found
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-  /v1/apps/{id}/ad:
-    get:
-      operationId: getAppAd
-      summary: Retrieve application ad
-      description: Get ad associated with a specific application
-      tags:
-        - ads
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned ad
-          schema:
-            type: string
-            example: 1
-      responses:
-        '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Ad'
-        '404':
-          description: Application ad not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application ad not found
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-  /v1/apps/{id}/app-store/productIds:
-    get:
-      operationId: GetAppStoreProductIds
-      summary: Retrieve application App Store products ids
-      description: Get all subscription ids associated with a specific application
-      tags:
         - apps
       security:
         - ApiKeyAuth: []
       parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned features
-          schema:
-            type: string
-            example: 1
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Platforms'
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
+          $ref: '#/components/responses/SectionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
         '404':
-          description: Application not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application not found
+          $ref: '#/components/responses/NotFoundResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-  /v1/apps/{id}/app-store/products:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/apps/{id}/ads:
     get:
-      operationId: GetAppStoreProducts
-      summary: Retrieve application App Store products
-      description: Get all subscription ids associated with a specific application
+      operationId: getAppAds
+      summary: Get all ads features associated with a specific application
+      description: Retrieve application ads
       tags:
-        - app-store
+        - ads
       security:
         - ApiKeyAuth: []
       parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned features
-          schema:
-            type: string
-            example: 1
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Platforms'
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/AppStoreProducts'
+          $ref: '#/components/responses/AdsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
         '404':
-          description: Application not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application not found
+          $ref: '#/components/responses/NotFoundResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/apps/{id}/ad:
+    get:
+      operationId: getAppAd
+      summary: Get ad associated with a specific application
+      description: Retrieve application ad
+      tags:
+        - ads
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Platforms'
+      responses:
+        '200':
+          $ref: '#/components/responses/AdResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/apps/{id}/in-app-purchases:
+    get:
+      operationId: getInAppPurchases
+      summary: Get all In-AppPurchases associated with a specific application
+      description: Retrieve application In-AppPurchases products
+      tags:
+        - in-app-purchases
+      security:
+        - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          $ref: '#/components/responses/InAppPurchaseResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/features/{id}:
     get:
-      operationId: getAppFeature
-      summary: Retrieve application features
-      description: Get all features associated with a specific application
+      summary: Get features
+      description: Retrieve features
+      operationId: getFeature
       tags:
         - features
       security:
         - ApiKeyAuth: []
       parameters:
-        - name: id
-          required: true
-          in: path
-          description: The application id used in the returned feature
-          schema:
-            type: string
-            example: 1000000
+        - $ref: '#/components/parameters/FeatureId'
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Feature'
+          $ref: '#/components/responses/FeatureResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
         '404':
-          description: Feature not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: App feature not found
+          $ref: '#/components/responses/NotFoundResponse'
         '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-  /v1/sale-offers:
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/in-app-purchases/offers:
     get:
-      operationId: getSaleOffers
-      summary: Retrieve StoreKit offers
-      description: Get all sale offers
+      operationId: getInAppPurchaseOffers
+      summary: Get all sale offers
+      description: Retrieve StoreKit offers
       tags:
-        - appStore
+        - in-app-purchases
       security:
         - ApiKeyAuth: []
       responses:
         '200':
-          description: A success response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/SaleOffer'
+          $ref: '#/components/responses/InAppPurchaseOffersResponse'
         '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
+          $ref: '#/components/responses/BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/infos:
     get:
       tags:
         - infos
       summary: Fetch info
-      operationId: fetchInfo
+      operationId: getInfo
       responses:
         '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Info'
+          $ref: '#/components/responses/InfoResponse'
         '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
+          $ref: '#/components/responses/BadRequestResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/health-check:
     get:
       summary: Health Check
       description: Endpoint to check the health of the service
       operationId: getHealthCheck
       tags:
-        - other
+        - system
       responses:
         '200':
           description: Service is healthy
@@ -525,52 +260,61 @@ paths:
                       - up
                       - down
                     example: up
+                required:
+                  - status
         '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Bad request
-        '500':
-          description: Service is not healthy
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: down
+          $ref: '#/components/responses/BadRequestResponse'
 components:
+  parameters:
+    AppVersion:
+      name: X-App-Version
+      in: header
+      description: Client application version
+      schema:
+        type: string
+        example: 1.2.3
+      required: true
+    Platforms:
+      name: platforms
+      in: query
+      description: Filter by platforms
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/PlatformType'
+    AppId:
+      name: id
+      in: path
+      required: true
+      description: Application ID
+      schema:
+        type: string
+        example: '1661200390'
+    FeatureId:
+      name: id
+      in: path
+      required: true
+      description: Feature ID
+      schema:
+        type: string
+        example: '1'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
       in: header
       name: X-API-Key
+      description: API key for authentication
   schemas:
-    Platform:
-      type: object
-      required:
-        - id
-        - title
-      properties:
-        id:
-          type: string
-          enum:
-            - iOS
-            - macOS
-            - tvOS
-            - watchOS
-            - visionOS
-            - web
-          example: iOS
-        title:
-          type: string
+    PlatformType:
+      type: string
+      enum:
+        - iOS
+        - macOS
+        - tvOS
+        - watchOS
+        - visionOS
     App:
+      type: object
       required:
         - id
         - name
@@ -581,7 +325,7 @@ components:
       properties:
         id:
           type: string
-          example: 1661200390
+          example: '1661200390'
         iconUrl:
           type: string
           format: url
@@ -603,15 +347,43 @@ components:
           example: calendardo
         termsDate:
           type: string
-          example: '2022-12-31'
           format: date
+          example: '2022-12-31'
         termsAdditions:
           type: array
           items:
             type: string
         platforms:
+          type: array
           items:
-            $ref: '#/components/schemas/Platform'
+            $ref: '#/components/schemas/PlatformType'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-08-15T10:30:00Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2025-04-02T15:35:22Z'
+    Error:
+      type: object
+      required:
+        - error
+        - code
+        - message
+      properties:
+        error:
+          type: string
+          description: Error type identifier
+          example: validation_error
+        code:
+          type: string
+          description: Specific error code
+          example: invalid_parameter
+        message:
+          type: string
+          description: Human-readable error message
+          example: The request contains invalid parameters
     Feature:
       type: object
       required:
@@ -625,15 +397,15 @@ components:
           description: Computed identifier from image, title, and subtitle
         title:
           type: string
-          description: Title of the store feature
+          description: Title of the store features
           example: Smart Weather Detection
         subtitle:
           type: string
-          description: Subtitle of the store feature
+          description: Subtitle of the store features
           example: Real-time weather updates
         description:
           type: string
-          description: Description of the store feature
+          description: Description of the store features
           example: Get instant notifications about weather changes
         textSize:
           type: string
@@ -655,17 +427,17 @@ components:
           type: string
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
-          description: URL for the feature icon
+          description: URL for the features icon
         illustrationUrl:
           type: string
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
-          description: URL for the feature icon
+          description: URL for the features icon
         screenshotUrl:
           type: string
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
-          description: URL for the feature screenshot
+          description: URL for the features screenshot
         screenshotAlignment:
           type: string
           enum:
@@ -739,35 +511,26 @@ components:
         priority:
           type: integer
           example: 1
-    AppStoreBanner:
+    InAppPurchaseBanner:
       type: object
       required:
         - id
+        - badge
         - title
-        - description
       properties:
         id:
           type: integer
           example: 6443709281
+        badge:
+          type: string
+          example: Control weight easily, follow the successes of every month
         title:
           type: string
           example: Control weight easily, follow the successes of every month
         description:
           type: string
           example: Control weight easily, follow the successes of every month
-    AppStoreProducts:
-      required:
-        - productIds
-        - banner
-      properties:
-        productIds:
-          type: array
-          items:
-            type: string
-        banner:
-          $ref: '#/components/schemas/AppStoreBanner'
-      type: object
-    SaleOffer:
+    InAppPurchaseOffer:
       type: object
       required:
         - id
@@ -881,12 +644,210 @@ components:
           items:
             $ref: '#/components/schemas/SocialNetwork'
       type: object
-    Info:
-      required:
-        - developer
-        - company
-      properties:
-        developer:
-          $ref: '#/components/schemas/Developer'
-        company:
-          $ref: '#/components/schemas/Company'
+  responses:
+    AppsResponse:
+      description: List of applications
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of applications
+            required:
+              - apps
+            properties:
+              apps:
+                type: array
+                description: Collection of applications
+                items:
+                  $ref: '#/components/schemas/App'
+            example:
+              apps:
+                - id: '1661200390'
+                  name: Calendar Do
+                  title: Add tasks to meetings
+                  subtitle: All your meetings on a simple list
+                  address: calendardo
+                  termsDate: '2022-12-31'
+                  iconUrl: https://oversize.app/assets/icons/apps/calendardo.png
+                  description: A simple and convenient viewing of events from the calendar in the form of a list of tasks.
+                  platforms:
+                    - iOS
+                    - macOS
+                  createdAt: '2022-08-15T10:30:00Z'
+                  updatedAt: '2025-04-02T15:35:22Z'
+                - id: '1842391042'
+                  name: Weight Tracker
+                  title: Track your weight
+                  subtitle: Simple weight tracking app
+                  address: weighttracker
+                  termsDate: '2023-01-15'
+                  iconUrl: https://oversize.app/assets/icons/apps/weighttracker.png
+                  description: A simple app to track your weight over time and visualize your progress.
+                  platforms:
+                    - iOS
+                  createdAt: '2023-01-10T08:45:00Z'
+                  updatedAt: '2025-04-01T16:20:45Z'
+    BadRequestResponse:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: validation_error
+            code: invalid_parameter
+            message: Bad request
+    InternalServerErrorResponse:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: validation_error
+            code: invalid_parameter
+            message: Internal server error
+    AppResponse:
+      description: Application
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Application
+            required:
+              - app
+            properties:
+              app:
+                $ref: '#/components/schemas/App'
+                description: Single application details
+    NotFoundResponse:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: validation_error
+            code: invalid_parameter
+            message: Not found
+    FeaturesResponse:
+      description: List of features
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of features
+            required:
+              - sections
+            properties:
+              sections:
+                type: array
+                description: Collection of sections
+                items:
+                  $ref: '#/components/schemas/Feature'
+    SectionsResponse:
+      description: List of features sections
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of feature sections
+            required:
+              - mainSection
+              - sections
+            properties:
+              mainSection:
+                description: General section
+                $ref: '#/components/schemas/Section'
+              sections:
+                type: array
+                description: Collection of sections
+                items:
+                  $ref: '#/components/schemas/Section'
+    AdsResponse:
+      description: List of app ads
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of app ads
+            required:
+              - ads
+            properties:
+              ads:
+                type: array
+                description: Collection of ads
+                items:
+                  $ref: '#/components/schemas/Ad'
+    AdResponse:
+      description: Ad
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Ad
+            required:
+              - ad
+            properties:
+              ad:
+                description: App Ad
+                $ref: '#/components/schemas/Ad'
+    InAppPurchaseResponse:
+      description: Response containing in-app purchase product IDs and banner information
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - productIds
+              - banner
+            properties:
+              productIds:
+                type: array
+                items:
+                  type: string
+              banner:
+                $ref: '#/components/schemas/InAppPurchaseBanner'
+    FeatureResponse:
+      description: Feature
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Feature
+            required:
+              - feature
+            properties:
+              feature:
+                $ref: '#/components/schemas/Feature'
+                description: Single feature details
+    InAppPurchaseOffersResponse:
+      description: List of offers
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of offers
+            required:
+              - offers
+            properties:
+              offers:
+                type: array
+                description: Collection of sections
+                items:
+                  $ref: '#/components/schemas/InAppPurchaseOffer'
+    InfoResponse:
+      description: Info
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Info
+            required:
+              - developer
+              - company
+            properties:
+              developer:
+                $ref: '#/components/schemas/Developer'
+              company:
+                $ref: '#/components/schemas/Company'
