@@ -11,16 +11,16 @@ import struct Foundation.Date
 #endif
 /// A type that performs HTTP operations defined by the OpenAPI document.
 public protocol APIProtocol: Sendable {
-    /// Retrieve applications
+    /// List all applications
     ///
-    /// Get all app
+    /// Retrieves a list of all applications
     ///
     /// - Remark: HTTP `GET /v1/apps`.
     /// - Remark: Generated from `#/paths//v1/apps/get(getApps)`.
     func getApps(_ input: Operations.getApps.Input) async throws -> Operations.getApps.Output
-    /// Retrieve application
-    ///
     /// Get App Information
+    ///
+    /// Retrieve application
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)`.
@@ -39,53 +39,46 @@ public protocol APIProtocol: Sendable {
     /// - Remark: HTTP `GET /v1/apps/{id}/features/sections`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)`.
     func getAppFeaturesSections(_ input: Operations.getAppFeaturesSections.Input) async throws -> Operations.getAppFeaturesSections.Output
-    /// Retrieve application ads
-    ///
     /// Get all ads features associated with a specific application
+    ///
+    /// Retrieve application ads
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ads`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)`.
     func getAppAds(_ input: Operations.getAppAds.Input) async throws -> Operations.getAppAds.Output
-    /// Retrieve application ad
-    ///
     /// Get ad associated with a specific application
+    ///
+    /// Retrieve application ad
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ad`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)`.
     func getAppAd(_ input: Operations.getAppAd.Input) async throws -> Operations.getAppAd.Output
-    /// Retrieve application App Store products ids
+    /// Get all In-AppPurchases associated with a specific application
     ///
-    /// Get all subscription ids associated with a specific application
+    /// Retrieve application In-AppPurchases products
     ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/productIds`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)`.
-    func GetAppStoreProductIds(_ input: Operations.GetAppStoreProductIds.Input) async throws -> Operations.GetAppStoreProductIds.Output
-    /// Retrieve application App Store products
+    /// - Remark: HTTP `GET /v1/apps/{id}/in-app-purchases`.
+    /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)`.
+    func getInAppPurchases(_ input: Operations.getInAppPurchases.Input) async throws -> Operations.getInAppPurchases.Output
+    /// Get features
     ///
-    /// Get all subscription ids associated with a specific application
-    ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/products`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)`.
-    func GetAppStoreProducts(_ input: Operations.GetAppStoreProducts.Input) async throws -> Operations.GetAppStoreProducts.Output
-    /// Retrieve application features
-    ///
-    /// Get all features associated with a specific application
+    /// Retrieve features
     ///
     /// - Remark: HTTP `GET /v1/features/{id}`.
-    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)`.
-    func getAppFeature(_ input: Operations.getAppFeature.Input) async throws -> Operations.getAppFeature.Output
-    /// Retrieve StoreKit offers
-    ///
+    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)`.
+    func getFeature(_ input: Operations.getFeature.Input) async throws -> Operations.getFeature.Output
     /// Get all sale offers
     ///
-    /// - Remark: HTTP `GET /v1/sale-offers`.
-    /// - Remark: Generated from `#/paths//v1/sale-offers/get(getSaleOffers)`.
-    func getSaleOffers(_ input: Operations.getSaleOffers.Input) async throws -> Operations.getSaleOffers.Output
+    /// Retrieve StoreKit offers
+    ///
+    /// - Remark: HTTP `GET /v1/in-app-purchases/offers`.
+    /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)`.
+    func getInAppPurchaseOffers(_ input: Operations.getInAppPurchaseOffers.Input) async throws -> Operations.getInAppPurchaseOffers.Output
     /// Fetch info
     ///
     /// - Remark: HTTP `GET /v1/infos`.
-    /// - Remark: Generated from `#/paths//v1/infos/get(fetchInfo)`.
-    func fetchInfo(_ input: Operations.fetchInfo.Input) async throws -> Operations.fetchInfo.Output
+    /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
+    func getInfo(_ input: Operations.getInfo.Input) async throws -> Operations.getInfo.Output
     /// Health Check
     ///
     /// Endpoint to check the health of the service
@@ -97,18 +90,24 @@ public protocol APIProtocol: Sendable {
 
 /// Convenience overloads for operation inputs.
 extension APIProtocol {
-    /// Retrieve applications
+    /// List all applications
     ///
-    /// Get all app
+    /// Retrieves a list of all applications
     ///
     /// - Remark: HTTP `GET /v1/apps`.
     /// - Remark: Generated from `#/paths//v1/apps/get(getApps)`.
-    public func getApps(headers: Operations.getApps.Input.Headers = .init()) async throws -> Operations.getApps.Output {
-        try await getApps(Operations.getApps.Input(headers: headers))
+    public func getApps(
+        query: Operations.getApps.Input.Query = .init(),
+        headers: Operations.getApps.Input.Headers = .init()
+    ) async throws -> Operations.getApps.Output {
+        try await getApps(Operations.getApps.Input(
+            query: query,
+            headers: headers
+        ))
     }
-    /// Retrieve application
-    ///
     /// Get App Information
+    ///
+    /// Retrieve application
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)`.
@@ -155,96 +154,85 @@ extension APIProtocol {
             headers: headers
         ))
     }
-    /// Retrieve application ads
-    ///
     /// Get all ads features associated with a specific application
+    ///
+    /// Retrieve application ads
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ads`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)`.
     public func getAppAds(
         path: Operations.getAppAds.Input.Path,
+        query: Operations.getAppAds.Input.Query = .init(),
         headers: Operations.getAppAds.Input.Headers = .init()
     ) async throws -> Operations.getAppAds.Output {
         try await getAppAds(Operations.getAppAds.Input(
             path: path,
+            query: query,
             headers: headers
         ))
     }
-    /// Retrieve application ad
-    ///
     /// Get ad associated with a specific application
+    ///
+    /// Retrieve application ad
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ad`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)`.
     public func getAppAd(
         path: Operations.getAppAd.Input.Path,
+        query: Operations.getAppAd.Input.Query = .init(),
         headers: Operations.getAppAd.Input.Headers = .init()
     ) async throws -> Operations.getAppAd.Output {
         try await getAppAd(Operations.getAppAd.Input(
             path: path,
+            query: query,
             headers: headers
         ))
     }
-    /// Retrieve application App Store products ids
+    /// Get all In-AppPurchases associated with a specific application
     ///
-    /// Get all subscription ids associated with a specific application
+    /// Retrieve application In-AppPurchases products
     ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/productIds`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)`.
-    public func GetAppStoreProductIds(
-        path: Operations.GetAppStoreProductIds.Input.Path,
-        headers: Operations.GetAppStoreProductIds.Input.Headers = .init()
-    ) async throws -> Operations.GetAppStoreProductIds.Output {
-        try await GetAppStoreProductIds(Operations.GetAppStoreProductIds.Input(
+    /// - Remark: HTTP `GET /v1/apps/{id}/in-app-purchases`.
+    /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)`.
+    public func getInAppPurchases(
+        path: Operations.getInAppPurchases.Input.Path,
+        headers: Operations.getInAppPurchases.Input.Headers = .init()
+    ) async throws -> Operations.getInAppPurchases.Output {
+        try await getInAppPurchases(Operations.getInAppPurchases.Input(
             path: path,
             headers: headers
         ))
     }
-    /// Retrieve application App Store products
+    /// Get features
     ///
-    /// Get all subscription ids associated with a specific application
-    ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/products`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)`.
-    public func GetAppStoreProducts(
-        path: Operations.GetAppStoreProducts.Input.Path,
-        headers: Operations.GetAppStoreProducts.Input.Headers = .init()
-    ) async throws -> Operations.GetAppStoreProducts.Output {
-        try await GetAppStoreProducts(Operations.GetAppStoreProducts.Input(
-            path: path,
-            headers: headers
-        ))
-    }
-    /// Retrieve application features
-    ///
-    /// Get all features associated with a specific application
+    /// Retrieve features
     ///
     /// - Remark: HTTP `GET /v1/features/{id}`.
-    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)`.
-    public func getAppFeature(
-        path: Operations.getAppFeature.Input.Path,
-        headers: Operations.getAppFeature.Input.Headers = .init()
-    ) async throws -> Operations.getAppFeature.Output {
-        try await getAppFeature(Operations.getAppFeature.Input(
+    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)`.
+    public func getFeature(
+        path: Operations.getFeature.Input.Path,
+        headers: Operations.getFeature.Input.Headers = .init()
+    ) async throws -> Operations.getFeature.Output {
+        try await getFeature(Operations.getFeature.Input(
             path: path,
             headers: headers
         ))
     }
-    /// Retrieve StoreKit offers
-    ///
     /// Get all sale offers
     ///
-    /// - Remark: HTTP `GET /v1/sale-offers`.
-    /// - Remark: Generated from `#/paths//v1/sale-offers/get(getSaleOffers)`.
-    public func getSaleOffers(headers: Operations.getSaleOffers.Input.Headers = .init()) async throws -> Operations.getSaleOffers.Output {
-        try await getSaleOffers(Operations.getSaleOffers.Input(headers: headers))
+    /// Retrieve StoreKit offers
+    ///
+    /// - Remark: HTTP `GET /v1/in-app-purchases/offers`.
+    /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)`.
+    public func getInAppPurchaseOffers(headers: Operations.getInAppPurchaseOffers.Input.Headers = .init()) async throws -> Operations.getInAppPurchaseOffers.Output {
+        try await getInAppPurchaseOffers(Operations.getInAppPurchaseOffers.Input(headers: headers))
     }
     /// Fetch info
     ///
     /// - Remark: HTTP `GET /v1/infos`.
-    /// - Remark: Generated from `#/paths//v1/infos/get(fetchInfo)`.
-    public func fetchInfo(headers: Operations.fetchInfo.Input.Headers = .init()) async throws -> Operations.fetchInfo.Output {
-        try await fetchInfo(Operations.fetchInfo.Input(headers: headers))
+    /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
+    public func getInfo(headers: Operations.getInfo.Input.Headers = .init()) async throws -> Operations.getInfo.Output {
+        try await getInfo(Operations.getInfo.Input(headers: headers))
     }
     /// Health Check
     ///
@@ -259,9 +247,9 @@ extension APIProtocol {
 
 /// Server URLs defined in the OpenAPI document.
 public enum Servers {
-    /// API url
+    /// Production API
     public enum Server1 {
-        /// API url
+        /// Production API
         public static func url() throws -> Foundation.URL {
             try Foundation.URL(
                 validatingOpenAPIServerURL: "https://api.oversize.app",
@@ -269,7 +257,7 @@ public enum Servers {
             )
         }
     }
-    /// API url
+    /// Production API
     @available(*, deprecated, renamed: "Servers.Server1.url")
     public static func server1() throws -> Foundation.URL {
         try Foundation.URL(
@@ -277,9 +265,9 @@ public enum Servers {
             variables: []
         )
     }
-    /// Test API url
+    /// Test API
     public enum Server2 {
-        /// Test API url
+        /// Test API
         public static func url() throws -> Foundation.URL {
             try Foundation.URL(
                 validatingOpenAPIServerURL: "https://test.api.oversize.app",
@@ -287,7 +275,7 @@ public enum Servers {
             )
         }
     }
-    /// Test API url
+    /// Test API
     @available(*, deprecated, renamed: "Servers.Server2.url")
     public static func server2() throws -> Foundation.URL {
         try Foundation.URL(
@@ -301,37 +289,13 @@ public enum Servers {
 public enum Components {
     /// Types generated from the `#/components/schemas` section of the OpenAPI document.
     public enum Schemas {
-        /// - Remark: Generated from `#/components/schemas/Platform`.
-        public struct Platform: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/Platform/id`.
-            @frozen public enum idPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case iOS = "iOS"
-                case macOS = "macOS"
-                case tvOS = "tvOS"
-                case watchOS = "watchOS"
-                case visionOS = "visionOS"
-                case web = "web"
-            }
-            /// - Remark: Generated from `#/components/schemas/Platform/id`.
-            public var id: Components.Schemas.Platform.idPayload
-            /// - Remark: Generated from `#/components/schemas/Platform/title`.
-            public var title: Swift.String
-            /// Creates a new `Platform`.
-            ///
-            /// - Parameters:
-            ///   - id:
-            ///   - title:
-            public init(
-                id: Components.Schemas.Platform.idPayload,
-                title: Swift.String
-            ) {
-                self.id = id
-                self.title = title
-            }
-            public enum CodingKeys: String, CodingKey {
-                case id
-                case title
-            }
+        /// - Remark: Generated from `#/components/schemas/PlatformType`.
+        @frozen public enum PlatformType: String, Codable, Hashable, Sendable, CaseIterable {
+            case iOS = "iOS"
+            case macOS = "macOS"
+            case tvOS = "tvOS"
+            case watchOS = "watchOS"
+            case visionOS = "visionOS"
         }
         /// - Remark: Generated from `#/components/schemas/App`.
         public struct App: Codable, Hashable, Sendable {
@@ -354,7 +318,11 @@ public enum Components {
             /// - Remark: Generated from `#/components/schemas/App/termsAdditions`.
             public var termsAdditions: [Swift.String]?
             /// - Remark: Generated from `#/components/schemas/App/platforms`.
-            public var platforms: [Components.Schemas.Platform]?
+            public var platforms: [Components.Schemas.PlatformType]?
+            /// - Remark: Generated from `#/components/schemas/App/createdAt`.
+            public var createdAt: Foundation.Date?
+            /// - Remark: Generated from `#/components/schemas/App/updatedAt`.
+            public var updatedAt: Foundation.Date?
             /// Creates a new `App`.
             ///
             /// - Parameters:
@@ -368,6 +336,8 @@ public enum Components {
             ///   - termsDate:
             ///   - termsAdditions:
             ///   - platforms:
+            ///   - createdAt:
+            ///   - updatedAt:
             public init(
                 id: Swift.String,
                 iconUrl: Swift.String? = nil,
@@ -378,7 +348,9 @@ public enum Components {
                 address: Swift.String,
                 termsDate: Swift.String,
                 termsAdditions: [Swift.String]? = nil,
-                platforms: [Components.Schemas.Platform]? = nil
+                platforms: [Components.Schemas.PlatformType]? = nil,
+                createdAt: Foundation.Date? = nil,
+                updatedAt: Foundation.Date? = nil
             ) {
                 self.id = id
                 self.iconUrl = iconUrl
@@ -390,6 +362,8 @@ public enum Components {
                 self.termsDate = termsDate
                 self.termsAdditions = termsAdditions
                 self.platforms = platforms
+                self.createdAt = createdAt
+                self.updatedAt = updatedAt
             }
             public enum CodingKeys: String, CodingKey {
                 case id
@@ -402,6 +376,43 @@ public enum Components {
                 case termsDate
                 case termsAdditions
                 case platforms
+                case createdAt
+                case updatedAt
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/Error`.
+        public struct _Error: Codable, Hashable, Sendable {
+            /// Error type identifier
+            ///
+            /// - Remark: Generated from `#/components/schemas/Error/error`.
+            public var error: Swift.String
+            /// Specific error code
+            ///
+            /// - Remark: Generated from `#/components/schemas/Error/code`.
+            public var code: Swift.String
+            /// Human-readable error message
+            ///
+            /// - Remark: Generated from `#/components/schemas/Error/message`.
+            public var message: Swift.String
+            /// Creates a new `_Error`.
+            ///
+            /// - Parameters:
+            ///   - error: Error type identifier
+            ///   - code: Specific error code
+            ///   - message: Human-readable error message
+            public init(
+                error: Swift.String,
+                code: Swift.String,
+                message: Swift.String
+            ) {
+                self.error = error
+                self.code = code
+                self.message = message
+            }
+            public enum CodingKeys: String, CodingKey {
+                case error
+                case code
+                case message
             }
         }
         /// - Remark: Generated from `#/components/schemas/Feature`.
@@ -410,15 +421,15 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/id`.
             public var id: Swift.String
-            /// Title of the store feature
+            /// Title of the store features
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/title`.
             public var title: Swift.String
-            /// Subtitle of the store feature
+            /// Subtitle of the store features
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/subtitle`.
             public var subtitle: Swift.String?
-            /// Description of the store feature
+            /// Description of the store features
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/description`.
             public var description: Swift.String?
@@ -446,15 +457,15 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/textAlignment`.
             public var textAlignment: Components.Schemas.Feature.textAlignmentPayload
-            /// URL for the feature icon
+            /// URL for the features icon
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/iconUrl`.
             public var iconUrl: Swift.String?
-            /// URL for the feature icon
+            /// URL for the features icon
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/illustrationUrl`.
             public var illustrationUrl: Swift.String?
-            /// URL for the feature screenshot
+            /// URL for the features screenshot
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/screenshotUrl`.
             public var screenshotUrl: Swift.String?
@@ -477,14 +488,14 @@ public enum Components {
             ///
             /// - Parameters:
             ///   - id: Computed identifier from image, title, and subtitle
-            ///   - title: Title of the store feature
-            ///   - subtitle: Subtitle of the store feature
-            ///   - description: Description of the store feature
+            ///   - title: Title of the store features
+            ///   - subtitle: Subtitle of the store features
+            ///   - description: Description of the store features
             ///   - textSize: Size of the text content
             ///   - textAlignment: Alignment of the text content
-            ///   - iconUrl: URL for the feature icon
-            ///   - illustrationUrl: URL for the feature icon
-            ///   - screenshotUrl: URL for the feature screenshot
+            ///   - iconUrl: URL for the features icon
+            ///   - illustrationUrl: URL for the features icon
+            ///   - screenshotUrl: URL for the features screenshot
             ///   - screenshotAlignment: Vertical alignment of the screenshot
             ///   - backgroundColor: Background color value in hex format without
             public init(
@@ -637,87 +648,70 @@ public enum Components {
                 case priority
             }
         }
-        /// - Remark: Generated from `#/components/schemas/AppStoreBanner`.
-        public struct AppStoreBanner: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/AppStoreBanner/id`.
+        /// - Remark: Generated from `#/components/schemas/InAppPurchaseBanner`.
+        public struct InAppPurchaseBanner: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseBanner/id`.
             public var id: Swift.Int
-            /// - Remark: Generated from `#/components/schemas/AppStoreBanner/title`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseBanner/badge`.
+            public var badge: Swift.String
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseBanner/title`.
             public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/AppStoreBanner/description`.
-            public var description: Swift.String
-            /// Creates a new `AppStoreBanner`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseBanner/description`.
+            public var description: Swift.String?
+            /// Creates a new `InAppPurchaseBanner`.
             ///
             /// - Parameters:
             ///   - id:
+            ///   - badge:
             ///   - title:
             ///   - description:
             public init(
                 id: Swift.Int,
+                badge: Swift.String,
                 title: Swift.String,
-                description: Swift.String
+                description: Swift.String? = nil
             ) {
                 self.id = id
+                self.badge = badge
                 self.title = title
                 self.description = description
             }
             public enum CodingKeys: String, CodingKey {
                 case id
+                case badge
                 case title
                 case description
             }
         }
-        /// - Remark: Generated from `#/components/schemas/AppStoreProducts`.
-        public struct AppStoreProducts: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/AppStoreProducts/productIds`.
-            public var productIds: [Swift.String]
-            /// - Remark: Generated from `#/components/schemas/AppStoreProducts/banner`.
-            public var banner: Components.Schemas.AppStoreBanner
-            /// Creates a new `AppStoreProducts`.
-            ///
-            /// - Parameters:
-            ///   - productIds:
-            ///   - banner:
-            public init(
-                productIds: [Swift.String],
-                banner: Components.Schemas.AppStoreBanner
-            ) {
-                self.productIds = productIds
-                self.banner = banner
-            }
-            public enum CodingKeys: String, CodingKey {
-                case productIds
-                case banner
-            }
-        }
-        /// - Remark: Generated from `#/components/schemas/SaleOffer`.
-        public struct SaleOffer: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/id`.
+        /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer`.
+        public struct InAppPurchaseOffer: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/id`.
             public var id: Swift.Int
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/badge`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/badge`.
             public var badge: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/title`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/title`.
             public var title: Swift.String
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/headline`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/headline`.
             public var headline: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/description`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/description`.
             public var description: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/imageURL`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/imageURL`.
             public var imageURL: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/startDate`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/startDate`.
             public var startDate: Foundation.Date
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/endDate`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/endDate`.
             public var endDate: Foundation.Date
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/accentColor`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/accentColor`.
             public var accentColor: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/effect`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/effect`.
             @frozen public enum effectPayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case snow = "snow"
             }
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/effect`.
-            public var effect: Components.Schemas.SaleOffer.effectPayload?
-            /// - Remark: Generated from `#/components/schemas/SaleOffer/region`.
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/effect`.
+            public var effect: Components.Schemas.InAppPurchaseOffer.effectPayload?
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/region`.
             public var region: [Swift.String]?
-            /// Creates a new `SaleOffer`.
+            /// Creates a new `InAppPurchaseOffer`.
             ///
             /// - Parameters:
             ///   - id:
@@ -741,7 +735,7 @@ public enum Components {
                 startDate: Foundation.Date,
                 endDate: Foundation.Date,
                 accentColor: Swift.String? = nil,
-                effect: Components.Schemas.SaleOffer.effectPayload? = nil,
+                effect: Components.Schemas.InAppPurchaseOffer.effectPayload? = nil,
                 region: [Swift.String]? = nil
             ) {
                 self.id = id
@@ -887,51 +881,635 @@ public enum Components {
                 case socialNetworks
             }
         }
-        /// - Remark: Generated from `#/components/schemas/Info`.
-        public struct Info: Codable, Hashable, Sendable {
-            /// - Remark: Generated from `#/components/schemas/Info/developer`.
-            public var developer: Components.Schemas.Developer
-            /// - Remark: Generated from `#/components/schemas/Info/company`.
-            public var company: Components.Schemas.Company
-            /// Creates a new `Info`.
-            ///
-            /// - Parameters:
-            ///   - developer:
-            ///   - company:
-            public init(
-                developer: Components.Schemas.Developer,
-                company: Components.Schemas.Company
-            ) {
-                self.developer = developer
-                self.company = company
-            }
-            public enum CodingKeys: String, CodingKey {
-                case developer
-                case company
-            }
-        }
     }
     /// Types generated from the `#/components/parameters` section of the OpenAPI document.
-    public enum Parameters {}
+    public enum Parameters {
+        /// Client application version
+        ///
+        /// - Remark: Generated from `#/components/parameters/AppVersion`.
+        public typealias AppVersion = Swift.String
+        /// Filter by platforms
+        ///
+        /// - Remark: Generated from `#/components/parameters/Platforms`.
+        public typealias Platforms = [Components.Schemas.PlatformType]
+        /// Application ID
+        ///
+        /// - Remark: Generated from `#/components/parameters/AppId`.
+        public typealias AppId = Swift.String
+        /// Feature ID
+        ///
+        /// - Remark: Generated from `#/components/parameters/FeatureId`.
+        public typealias FeatureId = Swift.String
+    }
     /// Types generated from the `#/components/requestBodies` section of the OpenAPI document.
     public enum RequestBodies {}
     /// Types generated from the `#/components/responses` section of the OpenAPI document.
-    public enum Responses {}
+    public enum Responses {
+        public struct AppsResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/AppsResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// List of applications
+                ///
+                /// - Remark: Generated from `#/components/responses/AppsResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Collection of applications
+                    ///
+                    /// - Remark: Generated from `#/components/responses/AppsResponse/content/json/apps`.
+                    public var apps: [Components.Schemas.App]
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - apps: Collection of applications
+                    public init(apps: [Components.Schemas.App]) {
+                        self.apps = apps
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case apps
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/AppsResponse/content/application\/json`.
+                case json(Components.Responses.AppsResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.AppsResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.AppsResponse.Body
+            /// Creates a new `AppsResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.AppsResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct BadRequestResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/BadRequestResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/components/responses/BadRequestResponse/content/application\/json`.
+                case json(Components.Schemas._Error)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Schemas._Error {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.BadRequestResponse.Body
+            /// Creates a new `BadRequestResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.BadRequestResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct InternalServerErrorResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/InternalServerErrorResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/components/responses/InternalServerErrorResponse/content/application\/json`.
+                case json(Components.Schemas._Error)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Schemas._Error {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.InternalServerErrorResponse.Body
+            /// Creates a new `InternalServerErrorResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.InternalServerErrorResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct AppResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/AppResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// Application
+                ///
+                /// - Remark: Generated from `#/components/responses/AppResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Single application details
+                    ///
+                    /// - Remark: Generated from `#/components/responses/AppResponse/content/json/app`.
+                    public var app: Components.Schemas.App
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - app: Single application details
+                    public init(app: Components.Schemas.App) {
+                        self.app = app
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case app
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/AppResponse/content/application\/json`.
+                case json(Components.Responses.AppResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.AppResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.AppResponse.Body
+            /// Creates a new `AppResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.AppResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct NotFoundResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/NotFoundResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/components/responses/NotFoundResponse/content/application\/json`.
+                case json(Components.Schemas._Error)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Schemas._Error {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.NotFoundResponse.Body
+            /// Creates a new `NotFoundResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.NotFoundResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct FeaturesResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/FeaturesResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// List of features
+                ///
+                /// - Remark: Generated from `#/components/responses/FeaturesResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Collection of sections
+                    ///
+                    /// - Remark: Generated from `#/components/responses/FeaturesResponse/content/json/features`.
+                    public var features: [Components.Schemas.Feature]
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - features: Collection of sections
+                    public init(features: [Components.Schemas.Feature]) {
+                        self.features = features
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case features
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/FeaturesResponse/content/application\/json`.
+                case json(Components.Responses.FeaturesResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.FeaturesResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.FeaturesResponse.Body
+            /// Creates a new `FeaturesResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.FeaturesResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct SectionsResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/SectionsResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// List of feature sections
+                ///
+                /// - Remark: Generated from `#/components/responses/SectionsResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// General section
+                    ///
+                    /// - Remark: Generated from `#/components/responses/SectionsResponse/content/json/mainSection`.
+                    public var mainSection: Components.Schemas.Section
+                    /// Collection of sections
+                    ///
+                    /// - Remark: Generated from `#/components/responses/SectionsResponse/content/json/sections`.
+                    public var sections: [Components.Schemas.Section]
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - mainSection: General section
+                    ///   - sections: Collection of sections
+                    public init(
+                        mainSection: Components.Schemas.Section,
+                        sections: [Components.Schemas.Section]
+                    ) {
+                        self.mainSection = mainSection
+                        self.sections = sections
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case mainSection
+                        case sections
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/SectionsResponse/content/application\/json`.
+                case json(Components.Responses.SectionsResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.SectionsResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.SectionsResponse.Body
+            /// Creates a new `SectionsResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.SectionsResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct AdsResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/AdsResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// List of app ads
+                ///
+                /// - Remark: Generated from `#/components/responses/AdsResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Collection of ads
+                    ///
+                    /// - Remark: Generated from `#/components/responses/AdsResponse/content/json/ads`.
+                    public var ads: [Components.Schemas.Ad]
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - ads: Collection of ads
+                    public init(ads: [Components.Schemas.Ad]) {
+                        self.ads = ads
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case ads
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/AdsResponse/content/application\/json`.
+                case json(Components.Responses.AdsResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.AdsResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.AdsResponse.Body
+            /// Creates a new `AdsResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.AdsResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct AdResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/AdResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// Ad
+                ///
+                /// - Remark: Generated from `#/components/responses/AdResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// App Ad
+                    ///
+                    /// - Remark: Generated from `#/components/responses/AdResponse/content/json/ad`.
+                    public var ad: Components.Schemas.Ad
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - ad: App Ad
+                    public init(ad: Components.Schemas.Ad) {
+                        self.ad = ad
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case ad
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/AdResponse/content/application\/json`.
+                case json(Components.Responses.AdResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.AdResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.AdResponse.Body
+            /// Creates a new `AdResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.AdResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct InAppPurchaseResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/InAppPurchaseResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/components/responses/InAppPurchaseResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// - Remark: Generated from `#/components/responses/InAppPurchaseResponse/content/json/productIds`.
+                    public var productIds: [Swift.String]
+                    /// - Remark: Generated from `#/components/responses/InAppPurchaseResponse/content/json/banner`.
+                    public var banner: Components.Schemas.InAppPurchaseBanner
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - productIds:
+                    ///   - banner:
+                    public init(
+                        productIds: [Swift.String],
+                        banner: Components.Schemas.InAppPurchaseBanner
+                    ) {
+                        self.productIds = productIds
+                        self.banner = banner
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case productIds
+                        case banner
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/InAppPurchaseResponse/content/application\/json`.
+                case json(Components.Responses.InAppPurchaseResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.InAppPurchaseResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.InAppPurchaseResponse.Body
+            /// Creates a new `InAppPurchaseResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.InAppPurchaseResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct FeatureResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/FeatureResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// Feature
+                ///
+                /// - Remark: Generated from `#/components/responses/FeatureResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Single feature details
+                    ///
+                    /// - Remark: Generated from `#/components/responses/FeatureResponse/content/json/feature`.
+                    public var feature: Components.Schemas.Feature
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - feature: Single feature details
+                    public init(feature: Components.Schemas.Feature) {
+                        self.feature = feature
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case feature
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/FeatureResponse/content/application\/json`.
+                case json(Components.Responses.FeatureResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.FeatureResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.FeatureResponse.Body
+            /// Creates a new `FeatureResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.FeatureResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct InAppPurchaseOffersResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// List of offers
+                ///
+                /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// Collection of sections
+                    ///
+                    /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content/json/offers`.
+                    public var offers: [Components.Schemas.InAppPurchaseOffer]
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - offers: Collection of sections
+                    public init(offers: [Components.Schemas.InAppPurchaseOffer]) {
+                        self.offers = offers
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case offers
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content/application\/json`.
+                case json(Components.Responses.InAppPurchaseOffersResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.InAppPurchaseOffersResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.InAppPurchaseOffersResponse.Body
+            /// Creates a new `InAppPurchaseOffersResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.InAppPurchaseOffersResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct InfoResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/InfoResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// Info
+                ///
+                /// - Remark: Generated from `#/components/responses/InfoResponse/content/json`.
+                public struct jsonPayload: Codable, Hashable, Sendable {
+                    /// - Remark: Generated from `#/components/responses/InfoResponse/content/json/developer`.
+                    public var developer: Components.Schemas.Developer
+                    /// - Remark: Generated from `#/components/responses/InfoResponse/content/json/company`.
+                    public var company: Components.Schemas.Company
+                    /// Creates a new `jsonPayload`.
+                    ///
+                    /// - Parameters:
+                    ///   - developer:
+                    ///   - company:
+                    public init(
+                        developer: Components.Schemas.Developer,
+                        company: Components.Schemas.Company
+                    ) {
+                        self.developer = developer
+                        self.company = company
+                    }
+                    public enum CodingKeys: String, CodingKey {
+                        case developer
+                        case company
+                    }
+                }
+                /// - Remark: Generated from `#/components/responses/InfoResponse/content/application\/json`.
+                case json(Components.Responses.InfoResponse.Body.jsonPayload)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Responses.InfoResponse.Body.jsonPayload {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.InfoResponse.Body
+            /// Creates a new `InfoResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.InfoResponse.Body) {
+                self.body = body
+            }
+        }
+    }
     /// Types generated from the `#/components/headers` section of the OpenAPI document.
     public enum Headers {}
 }
 
 /// API operations, with input and output types, generated from `#/paths` in the OpenAPI document.
 public enum Operations {
-    /// Retrieve applications
+    /// List all applications
     ///
-    /// Get all app
+    /// Retrieves a list of all applications
     ///
     /// - Remark: HTTP `GET /v1/apps`.
     /// - Remark: Generated from `#/paths//v1/apps/get(getApps)`.
     public enum getApps {
         public static let id: Swift.String = "getApps"
         public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/v1/apps/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// Filter by platforms
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - platforms: Filter by platforms
+                public init(platforms: Components.Parameters.Platforms? = nil) {
+                    self.platforms = platforms
+                }
+            }
+            public var query: Operations.getApps.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/GET/header`.
             public struct Headers: Sendable, Hashable {
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApps.AcceptableContentType>]
@@ -947,51 +1525,28 @@ public enum Operations {
             /// Creates a new `Input`.
             ///
             /// - Parameters:
+            ///   - query:
             ///   - headers:
-            public init(headers: Operations.getApps.Input.Headers = .init()) {
+            public init(
+                query: Operations.getApps.Input.Query = .init(),
+                headers: Operations.getApps.Input.Headers = .init()
+            ) {
+                self.query = query
                 self.headers = headers
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/GET/responses/200/content/application\/json`.
-                    case json([Components.Schemas.App])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Components.Schemas.App] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApps.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApps.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// List of applications
             ///
             /// - Remark: Generated from `#/paths//v1/apps/get(getApps)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getApps.Output.Ok)
+            case ok(Components.Responses.AppsResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getApps.Output.Ok {
+            public var ok: Components.Responses.AppsResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1004,60 +1559,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct BadRequest: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/GET/responses/400/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/GET/responses/400/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/GET/responses/400/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/GET/responses/400/content/application\/json`.
-                    case json(Operations.getApps.Output.BadRequest.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getApps.Output.BadRequest.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApps.Output.BadRequest.Body
-                /// Creates a new `BadRequest`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApps.Output.BadRequest.Body) {
-                    self.body = body
-                }
-            }
             /// Bad request
             ///
             /// - Remark: Generated from `#/paths//v1/apps/get(getApps)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.getApps.Output.BadRequest)
+            case badRequest(Components.Responses.BadRequestResponse)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            public var badRequest: Operations.getApps.Output.BadRequest {
+            public var badRequest: Components.Responses.BadRequestResponse {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -1070,60 +1582,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/GET/responses/500/content/application\/json`.
-                    case json(Operations.getApps.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getApps.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApps.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApps.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
             /// Internal server error
             ///
             /// - Remark: Generated from `#/paths//v1/apps/get(getApps)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getApps.Output.InternalServerError)
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getApps.Output.InternalServerError {
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1167,9 +1636,9 @@ public enum Operations {
             }
         }
     }
-    /// Retrieve application
-    ///
     /// Get App Information
+    ///
+    /// Retrieve application
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)`.
@@ -1178,15 +1647,15 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/path`.
             public struct Path: Sendable, Hashable {
-                /// The application id used in the returned feature
+                /// Application ID
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/path/id`.
-                public var id: Swift.String
+                public var id: Components.Parameters.AppId
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - id: The application id used in the returned feature
-                public init(id: Swift.String) {
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
                     self.id = id
                 }
             }
@@ -1217,45 +1686,17 @@ public enum Operations {
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.App)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.App {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApp.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApp.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// Application
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getApp.Output.Ok)
+            case ok(Components.Responses.AppResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getApp.Output.Ok {
+            public var ok: Components.Responses.AppResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1268,60 +1709,40 @@ public enum Operations {
                     }
                 }
             }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
                     }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/404/content/application\/json`.
-                    case json(Operations.getApp.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getApp.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApp.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApp.Output.NotFound.Body) {
-                    self.body = body
                 }
             }
-            /// Feature not found
+            /// Not found
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)/responses/404`.
             ///
             /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getApp.Output.NotFound)
+            case notFound(Components.Responses.NotFoundResponse)
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getApp.Output.NotFound {
+            public var notFound: Components.Responses.NotFoundResponse {
                 get throws {
                     switch self {
                     case let .notFound(response):
@@ -1334,60 +1755,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/responses/500/content/application\/json`.
-                    case json(Operations.getApp.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getApp.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getApp.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getApp.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
             /// Internal server error
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getApp.Output.InternalServerError)
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getApp.Output.InternalServerError {
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1442,21 +1820,25 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/path`.
             public struct Path: Sendable, Hashable {
-                /// The application id used in the returned features
+                /// Application ID
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/path/id`.
-                public var id: Swift.String
+                public var id: Components.Parameters.AppId
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - id: The application id used in the returned features
-                public init(id: Swift.String) {
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
                     self.id = id
                 }
             }
             public var path: Operations.getAppFeatures.Input.Path
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query`.
             public struct Query: Sendable, Hashable {
+                /// Filter by platforms
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/context`.
                 @frozen public enum contextPayload: String, Codable, Hashable, Sendable, CaseIterable {
                     case paywall = "paywall"
@@ -1466,30 +1848,17 @@ public enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/context`.
                 public var context: Operations.getAppFeatures.Input.Query.contextPayload?
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/platform`.
-                @frozen public enum platformPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                    case iOS = "iOS"
-                    case macOS = "macOS"
-                    case tvOS = "tvOS"
-                    case watchOS = "watchOS"
-                    case visionOS = "visionOS"
-                    case web = "web"
-                }
-                /// Filter features by platform
-                ///
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/platform`.
-                public var platform: Operations.getAppFeatures.Input.Query.platformPayload?
                 /// Creates a new `Query`.
                 ///
                 /// - Parameters:
+                ///   - platforms: Filter by platforms
                 ///   - context: Filter features by context
-                ///   - platform: Filter features by platform
                 public init(
-                    context: Operations.getAppFeatures.Input.Query.contextPayload? = nil,
-                    platform: Operations.getAppFeatures.Input.Query.platformPayload? = nil
+                    platforms: Components.Parameters.Platforms? = nil,
+                    context: Operations.getAppFeatures.Input.Query.contextPayload? = nil
                 ) {
+                    self.platforms = platforms
                     self.context = context
-                    self.platform = platform
                 }
             }
             public var query: Operations.getAppFeatures.Input.Query
@@ -1522,45 +1891,17 @@ public enum Operations {
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/200/content/application\/json`.
-                    case json([Components.Schemas.Feature])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Components.Schemas.Feature] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeatures.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeatures.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// List of features
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/get(getAppFeatures)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getAppFeatures.Output.Ok)
+            case ok(Components.Responses.FeaturesResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getAppFeatures.Output.Ok {
+            public var ok: Components.Responses.FeaturesResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1573,60 +1914,40 @@ public enum Operations {
                     }
                 }
             }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/features/get(getAppFeatures)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
                     }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/404/content/application\/json`.
-                    case json(Operations.getAppFeatures.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeatures.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeatures.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeatures.Output.NotFound.Body) {
-                    self.body = body
                 }
             }
-            /// Application not found
+            /// Not found
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/get(getAppFeatures)/responses/404`.
             ///
             /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getAppFeatures.Output.NotFound)
+            case notFound(Components.Responses.NotFoundResponse)
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getAppFeatures.Output.NotFound {
+            public var notFound: Components.Responses.NotFoundResponse {
                 get throws {
                     switch self {
                     case let .notFound(response):
@@ -1639,60 +1960,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/responses/500/content/application\/json`.
-                    case json(Operations.getAppFeatures.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeatures.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeatures.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeatures.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
             /// Internal server error
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/get(getAppFeatures)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getAppFeatures.Output.InternalServerError)
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getAppFeatures.Output.InternalServerError {
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -1747,40 +2025,31 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/path`.
             public struct Path: Sendable, Hashable {
-                /// The application id used in the returned feature
+                /// Application ID
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/path/id`.
-                public var id: Swift.String
+                public var id: Components.Parameters.AppId
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - id: The application id used in the returned feature
-                public init(id: Swift.String) {
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
                     self.id = id
                 }
             }
             public var path: Operations.getAppFeaturesSections.Input.Path
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/query`.
             public struct Query: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/query/platform`.
-                @frozen public enum platformPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                    case iOS = "iOS"
-                    case macOS = "macOS"
-                    case tvOS = "tvOS"
-                    case watchOS = "watchOS"
-                    case visionOS = "visionOS"
-                    case web = "web"
-                }
-                /// Filter features by platform
+                /// Filter by platforms
                 ///
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/query/platform`.
-                public var platform: Operations.getAppFeaturesSections.Input.Query.platformPayload?
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
                 /// Creates a new `Query`.
                 ///
                 /// - Parameters:
-                ///   - platform: Filter features by platform
-                public init(platform: Operations.getAppFeaturesSections.Input.Query.platformPayload? = nil) {
-                    self.platform = platform
+                ///   - platforms: Filter by platforms
+                public init(platforms: Components.Parameters.Platforms? = nil) {
+                    self.platforms = platforms
                 }
             }
             public var query: Operations.getAppFeaturesSections.Input.Query
@@ -1813,45 +2082,17 @@ public enum Operations {
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/200/content/application\/json`.
-                    case json([Components.Schemas.Section])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Components.Schemas.Section] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeaturesSections.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeaturesSections.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// List of features sections
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getAppFeaturesSections.Output.Ok)
+            case ok(Components.Responses.SectionsResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getAppFeaturesSections.Output.Ok {
+            public var ok: Components.Responses.SectionsResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -1864,60 +2105,40 @@ public enum Operations {
                     }
                 }
             }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
                     }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/404/content/application\/json`.
-                    case json(Operations.getAppFeaturesSections.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeaturesSections.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeaturesSections.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeaturesSections.Output.NotFound.Body) {
-                    self.body = body
                 }
             }
-            /// Application not found
+            /// Not found
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)/responses/404`.
             ///
             /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getAppFeaturesSections.Output.NotFound)
+            case notFound(Components.Responses.NotFoundResponse)
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getAppFeaturesSections.Output.NotFound {
+            public var notFound: Components.Responses.NotFoundResponse {
                 get throws {
                     switch self {
                     case let .notFound(response):
@@ -1930,60 +2151,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/responses/500/content/application\/json`.
-                    case json(Operations.getAppFeaturesSections.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeaturesSections.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeaturesSections.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeaturesSections.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
             /// Internal server error
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getAppFeaturesSections.Output.InternalServerError)
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getAppFeaturesSections.Output.InternalServerError {
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -2027,9 +2205,9 @@ public enum Operations {
             }
         }
     }
-    /// Retrieve application ads
-    ///
     /// Get all ads features associated with a specific application
+    ///
+    /// Retrieve application ads
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ads`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)`.
@@ -2038,19 +2216,34 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/path`.
             public struct Path: Sendable, Hashable {
-                /// The application id used in the returned features
+                /// Application ID
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/path/id`.
-                public var id: Swift.String
+                public var id: Components.Parameters.AppId
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - id: The application id used in the returned features
-                public init(id: Swift.String) {
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
                     self.id = id
                 }
             }
             public var path: Operations.getAppAds.Input.Path
+            /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// Filter by platforms
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - platforms: Filter by platforms
+                public init(platforms: Components.Parameters.Platforms? = nil) {
+                    self.platforms = platforms
+                }
+            }
+            public var query: Operations.getAppAds.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header`.
             public struct Headers: Sendable, Hashable {
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAds.AcceptableContentType>]
@@ -2067,55 +2260,30 @@ public enum Operations {
             ///
             /// - Parameters:
             ///   - path:
+            ///   - query:
             ///   - headers:
             public init(
                 path: Operations.getAppAds.Input.Path,
+                query: Operations.getAppAds.Input.Query = .init(),
                 headers: Operations.getAppAds.Input.Headers = .init()
             ) {
                 self.path = path
+                self.query = query
                 self.headers = headers
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/200/content/application\/json`.
-                    case json([Components.Schemas.Ad])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Components.Schemas.Ad] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAds.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAds.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// List of app ads
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getAppAds.Output.Ok)
+            case ok(Components.Responses.AdsResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getAppAds.Output.Ok {
+            public var ok: Components.Responses.AdsResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -2128,60 +2296,40 @@ public enum Operations {
                     }
                 }
             }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
                     }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/404/content/application\/json`.
-                    case json(Operations.getAppAds.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppAds.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAds.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAds.Output.NotFound.Body) {
-                    self.body = body
                 }
             }
-            /// Application ads not found
+            /// Not found
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)/responses/404`.
             ///
             /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getAppAds.Output.NotFound)
+            case notFound(Components.Responses.NotFoundResponse)
             /// The associated value of the enum case if `self` is `.notFound`.
             ///
             /// - Throws: An error if `self` is not `.notFound`.
             /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getAppAds.Output.NotFound {
+            public var notFound: Components.Responses.NotFoundResponse {
                 get throws {
                     switch self {
                     case let .notFound(response):
@@ -2194,60 +2342,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/responses/500/content/application\/json`.
-                    case json(Operations.getAppAds.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppAds.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAds.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAds.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
             /// Internal server error
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)/responses/500`.
             ///
             /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getAppAds.Output.InternalServerError)
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
             /// The associated value of the enum case if `self` is `.internalServerError`.
             ///
             /// - Throws: An error if `self` is not `.internalServerError`.
             /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getAppAds.Output.InternalServerError {
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
                 get throws {
                     switch self {
                     case let .internalServerError(response):
@@ -2291,9 +2396,9 @@ public enum Operations {
             }
         }
     }
-    /// Retrieve application ad
-    ///
     /// Get ad associated with a specific application
+    ///
+    /// Retrieve application ad
     ///
     /// - Remark: HTTP `GET /v1/apps/{id}/ad`.
     /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)`.
@@ -2302,19 +2407,34 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/path`.
             public struct Path: Sendable, Hashable {
-                /// The application id used in the returned ad
+                /// Application ID
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/path/id`.
-                public var id: Swift.String
+                public var id: Components.Parameters.AppId
                 /// Creates a new `Path`.
                 ///
                 /// - Parameters:
-                ///   - id: The application id used in the returned ad
-                public init(id: Swift.String) {
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
                     self.id = id
                 }
             }
             public var path: Operations.getAppAd.Input.Path
+            /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// Filter by platforms
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - platforms: Filter by platforms
+                public init(platforms: Components.Parameters.Platforms? = nil) {
+                    self.platforms = platforms
+                }
+            }
+            public var query: Operations.getAppAd.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header`.
             public struct Headers: Sendable, Hashable {
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAd.AcceptableContentType>]
@@ -2331,55 +2451,30 @@ public enum Operations {
             ///
             /// - Parameters:
             ///   - path:
+            ///   - query:
             ///   - headers:
             public init(
                 path: Operations.getAppAd.Input.Path,
+                query: Operations.getAppAd.Input.Query = .init(),
                 headers: Operations.getAppAd.Input.Headers = .init()
             ) {
                 self.path = path
+                self.query = query
                 self.headers = headers
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.Ad)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.Ad {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAd.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAd.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
+            /// Ad
             ///
             /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.getAppAd.Output.Ok)
+            case ok(Components.Responses.AdResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.getAppAd.Output.Ok {
+            public var ok: Components.Responses.AdResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -2390,1098 +2485,19 @@ public enum Operations {
                             response: self
                         )
                     }
-                }
-            }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/404/content/application\/json`.
-                    case json(Operations.getAppAd.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppAd.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAd.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAd.Output.NotFound.Body) {
-                    self.body = body
-                }
-            }
-            /// Application ad not found
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/404`.
-            ///
-            /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getAppAd.Output.NotFound)
-            /// The associated value of the enum case if `self` is `.notFound`.
-            ///
-            /// - Throws: An error if `self` is not `.notFound`.
-            /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getAppAd.Output.NotFound {
-                get throws {
-                    switch self {
-                    case let .notFound(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "notFound",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/responses/500/content/application\/json`.
-                    case json(Operations.getAppAd.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppAd.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppAd.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppAd.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal server error
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getAppAd.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getAppAd.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// Retrieve application App Store products ids
-    ///
-    /// Get all subscription ids associated with a specific application
-    ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/productIds`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)`.
-    public enum GetAppStoreProductIds {
-        public static let id: Swift.String = "GetAppStoreProductIds"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/path`.
-            public struct Path: Sendable, Hashable {
-                /// The application id used in the returned features
-                ///
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/path/id`.
-                public var id: Swift.String
-                /// Creates a new `Path`.
-                ///
-                /// - Parameters:
-                ///   - id: The application id used in the returned features
-                public init(id: Swift.String) {
-                    self.id = id
-                }
-            }
-            public var path: Operations.GetAppStoreProductIds.Input.Path
-            /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetAppStoreProductIds.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetAppStoreProductIds.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.GetAppStoreProductIds.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - path:
-            ///   - headers:
-            public init(
-                path: Operations.GetAppStoreProductIds.Input.Path,
-                headers: Operations.GetAppStoreProductIds.Input.Headers = .init()
-            ) {
-                self.path = path
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/200/content/application\/json`.
-                    case json([Swift.String])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Swift.String] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProductIds.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProductIds.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.GetAppStoreProductIds.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.GetAppStoreProductIds.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/404/content/application\/json`.
-                    case json(Operations.GetAppStoreProductIds.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.GetAppStoreProductIds.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProductIds.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProductIds.Output.NotFound.Body) {
-                    self.body = body
-                }
-            }
-            /// Application not found
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)/responses/404`.
-            ///
-            /// HTTP response code: `404 notFound`.
-            case notFound(Operations.GetAppStoreProductIds.Output.NotFound)
-            /// The associated value of the enum case if `self` is `.notFound`.
-            ///
-            /// - Throws: An error if `self` is not `.notFound`.
-            /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.GetAppStoreProductIds.Output.NotFound {
-                get throws {
-                    switch self {
-                    case let .notFound(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "notFound",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/productIds/GET/responses/500/content/application\/json`.
-                    case json(Operations.GetAppStoreProductIds.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.GetAppStoreProductIds.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProductIds.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProductIds.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal server error
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/productIds/get(GetAppStoreProductIds)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.GetAppStoreProductIds.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.GetAppStoreProductIds.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// Retrieve application App Store products
-    ///
-    /// Get all subscription ids associated with a specific application
-    ///
-    /// - Remark: HTTP `GET /v1/apps/{id}/app-store/products`.
-    /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)`.
-    public enum GetAppStoreProducts {
-        public static let id: Swift.String = "GetAppStoreProducts"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/path`.
-            public struct Path: Sendable, Hashable {
-                /// The application id used in the returned features
-                ///
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/path/id`.
-                public var id: Swift.String
-                /// Creates a new `Path`.
-                ///
-                /// - Parameters:
-                ///   - id: The application id used in the returned features
-                public init(id: Swift.String) {
-                    self.id = id
-                }
-            }
-            public var path: Operations.GetAppStoreProducts.Input.Path
-            /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetAppStoreProducts.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.GetAppStoreProducts.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.GetAppStoreProducts.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - path:
-            ///   - headers:
-            public init(
-                path: Operations.GetAppStoreProducts.Input.Path,
-                headers: Operations.GetAppStoreProducts.Input.Headers = .init()
-            ) {
-                self.path = path
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.AppStoreProducts)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.AppStoreProducts {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProducts.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProducts.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.GetAppStoreProducts.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.GetAppStoreProducts.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/404/content/application\/json`.
-                    case json(Operations.GetAppStoreProducts.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.GetAppStoreProducts.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProducts.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProducts.Output.NotFound.Body) {
-                    self.body = body
-                }
-            }
-            /// Application not found
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)/responses/404`.
-            ///
-            /// HTTP response code: `404 notFound`.
-            case notFound(Operations.GetAppStoreProducts.Output.NotFound)
-            /// The associated value of the enum case if `self` is `.notFound`.
-            ///
-            /// - Throws: An error if `self` is not `.notFound`.
-            /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.GetAppStoreProducts.Output.NotFound {
-                get throws {
-                    switch self {
-                    case let .notFound(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "notFound",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/apps/{id}/app-store/products/GET/responses/500/content/application\/json`.
-                    case json(Operations.GetAppStoreProducts.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.GetAppStoreProducts.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.GetAppStoreProducts.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.GetAppStoreProducts.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal server error
-            ///
-            /// - Remark: Generated from `#/paths//v1/apps/{id}/app-store/products/get(GetAppStoreProducts)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.GetAppStoreProducts.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.GetAppStoreProducts.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// Retrieve application features
-    ///
-    /// Get all features associated with a specific application
-    ///
-    /// - Remark: HTTP `GET /v1/features/{id}`.
-    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)`.
-    public enum getAppFeature {
-        public static let id: Swift.String = "getAppFeature"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/v1/features/{id}/GET/path`.
-            public struct Path: Sendable, Hashable {
-                /// The application id used in the returned feature
-                ///
-                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/path/id`.
-                public var id: Swift.String
-                /// Creates a new `Path`.
-                ///
-                /// - Parameters:
-                ///   - id: The application id used in the returned feature
-                public init(id: Swift.String) {
-                    self.id = id
-                }
-            }
-            public var path: Operations.getAppFeature.Input.Path
-            /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeature.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeature.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.getAppFeature.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - path:
-            ///   - headers:
-            public init(
-                path: Operations.getAppFeature.Input.Path,
-                headers: Operations.getAppFeature.Input.Headers = .init()
-            ) {
-                self.path = path
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.Feature)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.Feature {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeature.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeature.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
-            ///
-            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.getAppFeature.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.getAppFeature.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct NotFound: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/404/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/404/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/404/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/404/content/application\/json`.
-                    case json(Operations.getAppFeature.Output.NotFound.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeature.Output.NotFound.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeature.Output.NotFound.Body
-                /// Creates a new `NotFound`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeature.Output.NotFound.Body) {
-                    self.body = body
-                }
-            }
-            /// Feature not found
-            ///
-            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)/responses/404`.
-            ///
-            /// HTTP response code: `404 notFound`.
-            case notFound(Operations.getAppFeature.Output.NotFound)
-            /// The associated value of the enum case if `self` is `.notFound`.
-            ///
-            /// - Throws: An error if `self` is not `.notFound`.
-            /// - SeeAlso: `.notFound`.
-            public var notFound: Operations.getAppFeature.Output.NotFound {
-                get throws {
-                    switch self {
-                    case let .notFound(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "notFound",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/500/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/features/{id}/GET/responses/500/content/application\/json`.
-                    case json(Operations.getAppFeature.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getAppFeature.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getAppFeature.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getAppFeature.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Internal server error
-            ///
-            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getAppFeature)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getAppFeature.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getAppFeature.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
-                            response: self
-                        )
-                    }
-                }
-            }
-            /// Undocumented response.
-            ///
-            /// A response with a code that is not documented in the OpenAPI document.
-            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
-        }
-        @frozen public enum AcceptableContentType: AcceptableProtocol {
-            case json
-            case other(Swift.String)
-            public init?(rawValue: Swift.String) {
-                switch rawValue.lowercased() {
-                case "application/json":
-                    self = .json
-                default:
-                    self = .other(rawValue)
-                }
-            }
-            public var rawValue: Swift.String {
-                switch self {
-                case let .other(string):
-                    return string
-                case .json:
-                    return "application/json"
-                }
-            }
-            public static var allCases: [Self] {
-                [
-                    .json
-                ]
-            }
-        }
-    }
-    /// Retrieve StoreKit offers
-    ///
-    /// Get all sale offers
-    ///
-    /// - Remark: HTTP `GET /v1/sale-offers`.
-    /// - Remark: Generated from `#/paths//v1/sale-offers/get(getSaleOffers)`.
-    public enum getSaleOffers {
-        public static let id: Swift.String = "getSaleOffers"
-        public struct Input: Sendable, Hashable {
-            /// - Remark: Generated from `#/paths/v1/sale-offers/GET/header`.
-            public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getSaleOffers.AcceptableContentType>]
-                /// Creates a new `Headers`.
-                ///
-                /// - Parameters:
-                ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getSaleOffers.AcceptableContentType>] = .defaultValues()) {
-                    self.accept = accept
-                }
-            }
-            public var headers: Operations.getSaleOffers.Input.Headers
-            /// Creates a new `Input`.
-            ///
-            /// - Parameters:
-            ///   - headers:
-            public init(headers: Operations.getSaleOffers.Input.Headers = .init()) {
-                self.headers = headers
-            }
-        }
-        @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/200/content/application\/json`.
-                    case json([Components.Schemas.SaleOffer])
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: [Components.Schemas.SaleOffer] {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getSaleOffers.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getSaleOffers.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// A success response
-            ///
-            /// - Remark: Generated from `#/paths//v1/sale-offers/get(getSaleOffers)/responses/200`.
-            ///
-            /// HTTP response code: `200 ok`.
-            case ok(Operations.getSaleOffers.Output.Ok)
-            /// The associated value of the enum case if `self` is `.ok`.
-            ///
-            /// - Throws: An error if `self` is not `.ok`.
-            /// - SeeAlso: `.ok`.
-            public var ok: Operations.getSaleOffers.Output.Ok {
-                get throws {
-                    switch self {
-                    case let .ok(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "ok",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct BadRequest: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/400/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/400/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/400/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/sale-offers/GET/responses/400/content/application\/json`.
-                    case json(Operations.getSaleOffers.Output.BadRequest.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getSaleOffers.Output.BadRequest.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getSaleOffers.Output.BadRequest.Body
-                /// Creates a new `BadRequest`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getSaleOffers.Output.BadRequest.Body) {
-                    self.body = body
                 }
             }
             /// Bad request
             ///
-            /// - Remark: Generated from `#/paths//v1/sale-offers/get(getSaleOffers)/responses/400`.
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.getSaleOffers.Output.BadRequest)
+            case badRequest(Components.Responses.BadRequestResponse)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            public var badRequest: Operations.getSaleOffers.Output.BadRequest {
+            public var badRequest: Components.Responses.BadRequestResponse {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -3489,6 +2505,551 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Not found
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Components.Responses.NotFoundResponse)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Components.Responses.NotFoundResponse {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Internal server error
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Get all In-AppPurchases associated with a specific application
+    ///
+    /// Retrieve application In-AppPurchases products
+    ///
+    /// - Remark: HTTP `GET /v1/apps/{id}/in-app-purchases`.
+    /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)`.
+    public enum getInAppPurchases {
+        public static let id: Swift.String = "getInAppPurchases"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// Application ID
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/path/id`.
+                public var id: Components.Parameters.AppId
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - id: Application ID
+                public init(id: Components.Parameters.AppId) {
+                    self.id = id
+                }
+            }
+            public var path: Operations.getInAppPurchases.Input.Path
+            /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchases.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchases.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.getInAppPurchases.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.getInAppPurchases.Input.Path,
+                headers: Operations.getInAppPurchases.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            /// Response containing in-app purchase product IDs and banner information
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Components.Responses.InAppPurchaseResponse)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Components.Responses.InAppPurchaseResponse {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Not found
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Components.Responses.NotFoundResponse)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Components.Responses.NotFoundResponse {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Internal server error
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Get features
+    ///
+    /// Retrieve features
+    ///
+    /// - Remark: HTTP `GET /v1/features/{id}`.
+    /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)`.
+    public enum getFeature {
+        public static let id: Swift.String = "getFeature"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/v1/features/{id}/GET/path`.
+            public struct Path: Sendable, Hashable {
+                /// Feature ID
+                ///
+                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/path/id`.
+                public var id: Components.Parameters.FeatureId
+                /// Creates a new `Path`.
+                ///
+                /// - Parameters:
+                ///   - id: Feature ID
+                public init(id: Components.Parameters.FeatureId) {
+                    self.id = id
+                }
+            }
+            public var path: Operations.getFeature.Input.Path
+            /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getFeature.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getFeature.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.getFeature.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - path:
+            ///   - headers:
+            public init(
+                path: Operations.getFeature.Input.Path,
+                headers: Operations.getFeature.Input.Headers = .init()
+            ) {
+                self.path = path
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            /// Feature
+            ///
+            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Components.Responses.FeatureResponse)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Components.Responses.FeatureResponse {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Not found
+            ///
+            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Components.Responses.NotFoundResponse)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Components.Responses.NotFoundResponse {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Internal server error
+            ///
+            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Undocumented response.
+            ///
+            /// A response with a code that is not documented in the OpenAPI document.
+            case undocumented(statusCode: Swift.Int, OpenAPIRuntime.UndocumentedPayload)
+        }
+        @frozen public enum AcceptableContentType: AcceptableProtocol {
+            case json
+            case other(Swift.String)
+            public init?(rawValue: Swift.String) {
+                switch rawValue.lowercased() {
+                case "application/json":
+                    self = .json
+                default:
+                    self = .other(rawValue)
+                }
+            }
+            public var rawValue: Swift.String {
+                switch self {
+                case let .other(string):
+                    return string
+                case .json:
+                    return "application/json"
+                }
+            }
+            public static var allCases: [Self] {
+                [
+                    .json
+                ]
+            }
+        }
+    }
+    /// Get all sale offers
+    ///
+    /// Retrieve StoreKit offers
+    ///
+    /// - Remark: HTTP `GET /v1/in-app-purchases/offers`.
+    /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)`.
+    public enum getInAppPurchaseOffers {
+        public static let id: Swift.String = "getInAppPurchaseOffers"
+        public struct Input: Sendable, Hashable {
+            /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header`.
+            public struct Headers: Sendable, Hashable {
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchaseOffers.AcceptableContentType>]
+                /// Creates a new `Headers`.
+                ///
+                /// - Parameters:
+                ///   - accept:
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchaseOffers.AcceptableContentType>] = .defaultValues()) {
+                    self.accept = accept
+                }
+            }
+            public var headers: Operations.getInAppPurchaseOffers.Input.Headers
+            /// Creates a new `Input`.
+            ///
+            /// - Parameters:
+            ///   - headers:
+            public init(headers: Operations.getInAppPurchaseOffers.Input.Headers = .init()) {
+                self.headers = headers
+            }
+        }
+        @frozen public enum Output: Sendable, Hashable {
+            /// List of offers
+            ///
+            /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)/responses/200`.
+            ///
+            /// HTTP response code: `200 ok`.
+            case ok(Components.Responses.InAppPurchaseOffersResponse)
+            /// The associated value of the enum case if `self` is `.ok`.
+            ///
+            /// - Throws: An error if `self` is not `.ok`.
+            /// - SeeAlso: `.ok`.
+            public var ok: Components.Responses.InAppPurchaseOffersResponse {
+                get throws {
+                    switch self {
+                    case let .ok(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "ok",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Bad request
+            ///
+            /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)/responses/400`.
+            ///
+            /// HTTP response code: `400 badRequest`.
+            case badRequest(Components.Responses.BadRequestResponse)
+            /// The associated value of the enum case if `self` is `.badRequest`.
+            ///
+            /// - Throws: An error if `self` is not `.badRequest`.
+            /// - SeeAlso: `.badRequest`.
+            public var badRequest: Components.Responses.BadRequestResponse {
+                get throws {
+                    switch self {
+                    case let .badRequest(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Not found
+            ///
+            /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)/responses/404`.
+            ///
+            /// HTTP response code: `404 notFound`.
+            case notFound(Components.Responses.NotFoundResponse)
+            /// The associated value of the enum case if `self` is `.notFound`.
+            ///
+            /// - Throws: An error if `self` is not `.notFound`.
+            /// - SeeAlso: `.notFound`.
+            public var notFound: Components.Responses.NotFoundResponse {
+                get throws {
+                    switch self {
+                    case let .notFound(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "notFound",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Internal server error
+            ///
+            /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
                             response: self
                         )
                     }
@@ -3528,70 +3089,42 @@ public enum Operations {
     /// Fetch info
     ///
     /// - Remark: HTTP `GET /v1/infos`.
-    /// - Remark: Generated from `#/paths//v1/infos/get(fetchInfo)`.
-    public enum fetchInfo {
-        public static let id: Swift.String = "fetchInfo"
+    /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
+    public enum getInfo {
+        public static let id: Swift.String = "getInfo"
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/infos/GET/header`.
             public struct Headers: Sendable, Hashable {
-                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.fetchInfo.AcceptableContentType>]
+                public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInfo.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.fetchInfo.AcceptableContentType>] = .defaultValues()) {
+                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInfo.AcceptableContentType>] = .defaultValues()) {
                     self.accept = accept
                 }
             }
-            public var headers: Operations.fetchInfo.Input.Headers
+            public var headers: Operations.getInfo.Input.Headers
             /// Creates a new `Input`.
             ///
             /// - Parameters:
             ///   - headers:
-            public init(headers: Operations.fetchInfo.Input.Headers = .init()) {
+            public init(headers: Operations.getInfo.Input.Headers = .init()) {
                 self.headers = headers
             }
         }
         @frozen public enum Output: Sendable, Hashable {
-            public struct Ok: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/infos/GET/responses/200/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/infos/GET/responses/200/content/application\/json`.
-                    case json(Components.Schemas.Info)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Components.Schemas.Info {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.fetchInfo.Output.Ok.Body
-                /// Creates a new `Ok`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.fetchInfo.Output.Ok.Body) {
-                    self.body = body
-                }
-            }
-            /// Successful operation
+            /// Info
             ///
-            /// - Remark: Generated from `#/paths//v1/infos/get(fetchInfo)/responses/200`.
+            /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)/responses/200`.
             ///
             /// HTTP response code: `200 ok`.
-            case ok(Operations.fetchInfo.Output.Ok)
+            case ok(Components.Responses.InfoResponse)
             /// The associated value of the enum case if `self` is `.ok`.
             ///
             /// - Throws: An error if `self` is not `.ok`.
             /// - SeeAlso: `.ok`.
-            public var ok: Operations.fetchInfo.Output.Ok {
+            public var ok: Components.Responses.InfoResponse {
                 get throws {
                     switch self {
                     case let .ok(response):
@@ -3604,60 +3137,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct BadRequest: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/infos/GET/responses/400/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/infos/GET/responses/400/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/infos/GET/responses/400/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/infos/GET/responses/400/content/application\/json`.
-                    case json(Operations.fetchInfo.Output.BadRequest.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.fetchInfo.Output.BadRequest.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.fetchInfo.Output.BadRequest.Body
-                /// Creates a new `BadRequest`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.fetchInfo.Output.BadRequest.Body) {
-                    self.body = body
-                }
-            }
             /// Bad request
             ///
-            /// - Remark: Generated from `#/paths//v1/infos/get(fetchInfo)/responses/400`.
+            /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.fetchInfo.Output.BadRequest)
+            case badRequest(Components.Responses.BadRequestResponse)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            public var badRequest: Operations.fetchInfo.Output.BadRequest {
+            public var badRequest: Components.Responses.BadRequestResponse {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -3665,6 +3155,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Internal server error
+            ///
+            /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)/responses/500`.
+            ///
+            /// HTTP response code: `500 internalServerError`.
+            case internalServerError(Components.Responses.InternalServerErrorResponse)
+            /// The associated value of the enum case if `self` is `.internalServerError`.
+            ///
+            /// - Throws: An error if `self` is not `.internalServerError`.
+            /// - SeeAlso: `.internalServerError`.
+            public var internalServerError: Components.Responses.InternalServerErrorResponse {
+                get throws {
+                    switch self {
+                    case let .internalServerError(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "internalServerError",
                             response: self
                         )
                     }
@@ -3742,12 +3255,12 @@ public enum Operations {
                             case down = "down"
                         }
                         /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/200/content/json/status`.
-                        public var status: Operations.getHealthCheck.Output.Ok.Body.jsonPayload.statusPayload?
+                        public var status: Operations.getHealthCheck.Output.Ok.Body.jsonPayload.statusPayload
                         /// Creates a new `jsonPayload`.
                         ///
                         /// - Parameters:
                         ///   - status:
-                        public init(status: Operations.getHealthCheck.Output.Ok.Body.jsonPayload.statusPayload? = nil) {
+                        public init(status: Operations.getHealthCheck.Output.Ok.Body.jsonPayload.statusPayload) {
                             self.status = status
                         }
                         public enum CodingKeys: String, CodingKey {
@@ -3802,60 +3315,17 @@ public enum Operations {
                     }
                 }
             }
-            public struct BadRequest: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/400/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/400/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/400/content/json/error`.
-                        public var error: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - error:
-                        public init(error: Swift.String? = nil) {
-                            self.error = error
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case error
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/400/content/application\/json`.
-                    case json(Operations.getHealthCheck.Output.BadRequest.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getHealthCheck.Output.BadRequest.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getHealthCheck.Output.BadRequest.Body
-                /// Creates a new `BadRequest`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getHealthCheck.Output.BadRequest.Body) {
-                    self.body = body
-                }
-            }
             /// Bad request
             ///
             /// - Remark: Generated from `#/paths//v1/health-check/get(getHealthCheck)/responses/400`.
             ///
             /// HTTP response code: `400 badRequest`.
-            case badRequest(Operations.getHealthCheck.Output.BadRequest)
+            case badRequest(Components.Responses.BadRequestResponse)
             /// The associated value of the enum case if `self` is `.badRequest`.
             ///
             /// - Throws: An error if `self` is not `.badRequest`.
             /// - SeeAlso: `.badRequest`.
-            public var badRequest: Operations.getHealthCheck.Output.BadRequest {
+            public var badRequest: Components.Responses.BadRequestResponse {
                 get throws {
                     switch self {
                     case let .badRequest(response):
@@ -3863,72 +3333,6 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
-                            response: self
-                        )
-                    }
-                }
-            }
-            public struct InternalServerError: Sendable, Hashable {
-                /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/500/content`.
-                @frozen public enum Body: Sendable, Hashable {
-                    /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/500/content/json`.
-                    public struct jsonPayload: Codable, Hashable, Sendable {
-                        /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/500/content/json/status`.
-                        public var status: Swift.String?
-                        /// Creates a new `jsonPayload`.
-                        ///
-                        /// - Parameters:
-                        ///   - status:
-                        public init(status: Swift.String? = nil) {
-                            self.status = status
-                        }
-                        public enum CodingKeys: String, CodingKey {
-                            case status
-                        }
-                    }
-                    /// - Remark: Generated from `#/paths/v1/health-check/GET/responses/500/content/application\/json`.
-                    case json(Operations.getHealthCheck.Output.InternalServerError.Body.jsonPayload)
-                    /// The associated value of the enum case if `self` is `.json`.
-                    ///
-                    /// - Throws: An error if `self` is not `.json`.
-                    /// - SeeAlso: `.json`.
-                    public var json: Operations.getHealthCheck.Output.InternalServerError.Body.jsonPayload {
-                        get throws {
-                            switch self {
-                            case let .json(body):
-                                return body
-                            }
-                        }
-                    }
-                }
-                /// Received HTTP response body
-                public var body: Operations.getHealthCheck.Output.InternalServerError.Body
-                /// Creates a new `InternalServerError`.
-                ///
-                /// - Parameters:
-                ///   - body: Received HTTP response body
-                public init(body: Operations.getHealthCheck.Output.InternalServerError.Body) {
-                    self.body = body
-                }
-            }
-            /// Service is not healthy
-            ///
-            /// - Remark: Generated from `#/paths//v1/health-check/get(getHealthCheck)/responses/500`.
-            ///
-            /// HTTP response code: `500 internalServerError`.
-            case internalServerError(Operations.getHealthCheck.Output.InternalServerError)
-            /// The associated value of the enum case if `self` is `.internalServerError`.
-            ///
-            /// - Throws: An error if `self` is not `.internalServerError`.
-            /// - SeeAlso: `.internalServerError`.
-            public var internalServerError: Operations.getHealthCheck.Output.InternalServerError {
-                get throws {
-                    switch self {
-                    case let .internalServerError(response):
-                        return response
-                    default:
-                        try throwUnexpectedResponseStatus(
-                            expectedStatus: "internalServerError",
                             response: self
                         )
                     }
