@@ -72,7 +72,7 @@ public struct NetworkService: Sendable {
         }
     }
 
-    public func fetchDeveloper() async -> Result<InfoResponse, AppError> {
+    public func fetchInfo() async -> Result<InfoResponse, AppError> {
         do {
             let response = try await client.getInfo(.init())
             switch response {
