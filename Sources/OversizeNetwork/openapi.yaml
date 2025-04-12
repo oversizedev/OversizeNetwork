@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.1.1
+  version: 1.2.0
   description: |-
     # OversizeAPI
 
@@ -384,6 +384,32 @@ components:
           type: string
           description: Human-readable error message
           example: The request contains invalid parameters
+    Screenshot:
+      type: object
+      required:
+        - url
+        - alignment
+        - platform
+      properties:
+        url:
+          type: string
+          format: url
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+          description: URL for the features screenshot
+        alignment:
+          type: string
+          enum:
+            - top
+            - center
+            - bottom
+          example: top
+          description: Vertical alignment of the screenshot
+        backgroundColor:
+          type: string
+          example: ffffff
+          description: Background color value in hex format without
+        platform:
+          $ref: '#/components/schemas/PlatformType'
     Feature:
       type: object
       required:
@@ -391,6 +417,7 @@ components:
         - title
         - textAlignment
         - textSize
+        - screenshots
       properties:
         id:
           type: string
@@ -433,22 +460,9 @@ components:
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
           description: URL for the features icon
-        screenshotUrl:
-          type: string
-          format: url
-          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
-          description: URL for the features screenshot
-        screenshotAlignment:
-          type: string
-          enum:
-            - top
-            - bottom
-          example: top
-          description: Vertical alignment of the screenshot
-        backgroundColor:
-          type: string
-          example: ffffff
-          description: Background color value in hex format without
+        screenshots:
+          items:
+            $ref: '#/components/schemas/Screenshot'
     Section:
       type: object
       required:
