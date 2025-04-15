@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.1.1
+  version: 1.4.0
   description: |-
     # OversizeAPI
 
@@ -384,6 +384,32 @@ components:
           type: string
           description: Human-readable error message
           example: The request contains invalid parameters
+    Screenshot:
+      type: object
+      required:
+        - url
+        - alignment
+        - platform
+      properties:
+        url:
+          type: string
+          format: url
+          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+          description: URL for the features screenshot
+        alignment:
+          type: string
+          enum:
+            - top
+            - center
+            - bottom
+          example: top
+          description: Vertical alignment of the screenshot
+        backgroundColor:
+          type: string
+          example: ffffff
+          description: Background color value in hex format without
+        platform:
+          $ref: '#/components/schemas/PlatformType'
     Feature:
       type: object
       required:
@@ -391,6 +417,7 @@ components:
         - title
         - textAlignment
         - textSize
+        - screenshots
       properties:
         id:
           type: string
@@ -433,22 +460,48 @@ components:
           format: url
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
           description: URL for the features icon
-        screenshotUrl:
+        screenshots:
+          items:
+            $ref: '#/components/schemas/Screenshot'
+    MainSection:
+      type: object
+      required:
+        - id
+        - title
+        - type
+        - features
+      properties:
+        id:
           type: string
-          format: url
-          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
-          description: URL for the features screenshot
-        screenshotAlignment:
+          example: 0
+        type:
           type: string
+          example: cards
           enum:
-            - top
-            - bottom
-          example: top
-          description: Vertical alignment of the screenshot
-        backgroundColor:
+            - default
+        title:
           type: string
-          example: ffffff
-          description: Background color value in hex format without
+          example: Features
+        subtitle:
+          type: string
+          example: Amazing features
+        description:
+          type: string
+          example: All data is saved in the phone or is possible synchronization with iCloud
+        color:
+          type: string
+          example: F53C6E
+        columns:
+          type: integer
+          example: 1
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screenshot'
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
     Section:
       type: object
       required:
@@ -458,8 +511,8 @@ components:
         - features
       properties:
         id:
-          type: integer
-          example: 100
+          type: string
+          example: 0
         type:
           type: string
           example: cards
@@ -478,13 +531,13 @@ components:
         color:
           type: string
           example: F53C6E
-        gridColumns:
+        columns:
           type: integer
           example: 1
-        screenshotUrl:
-          type: string
-          format: uri
-          example: https://cdn.oversize.design/assets/apps/dressweather/screenshots/1.png
+        screenshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/Screenshot'
         features:
           type: array
           items:
@@ -758,7 +811,7 @@ components:
             properties:
               mainSection:
                 description: General section
-                $ref: '#/components/schemas/Section'
+                $ref: '#/components/schemas/MainSection'
               sections:
                 type: array
                 description: Collection of sections
