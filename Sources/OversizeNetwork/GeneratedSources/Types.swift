@@ -415,6 +415,55 @@ public enum Components {
                 case message
             }
         }
+        /// - Remark: Generated from `#/components/schemas/Screenshot`.
+        public struct Screenshot: Codable, Hashable, Sendable {
+            /// URL for the features screenshot
+            ///
+            /// - Remark: Generated from `#/components/schemas/Screenshot/url`.
+            public var url: Swift.String
+            /// Vertical alignment of the screenshot
+            ///
+            /// - Remark: Generated from `#/components/schemas/Screenshot/alignment`.
+            @frozen public enum alignmentPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case top = "top"
+                case center = "center"
+                case bottom = "bottom"
+            }
+            /// Vertical alignment of the screenshot
+            ///
+            /// - Remark: Generated from `#/components/schemas/Screenshot/alignment`.
+            public var alignment: Components.Schemas.Screenshot.alignmentPayload
+            /// Background color value in hex format without
+            ///
+            /// - Remark: Generated from `#/components/schemas/Screenshot/backgroundColor`.
+            public var backgroundColor: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/Screenshot/platform`.
+            public var platform: Components.Schemas.PlatformType
+            /// Creates a new `Screenshot`.
+            ///
+            /// - Parameters:
+            ///   - url: URL for the features screenshot
+            ///   - alignment: Vertical alignment of the screenshot
+            ///   - backgroundColor: Background color value in hex format without
+            ///   - platform:
+            public init(
+                url: Swift.String,
+                alignment: Components.Schemas.Screenshot.alignmentPayload,
+                backgroundColor: Swift.String? = nil,
+                platform: Components.Schemas.PlatformType
+            ) {
+                self.url = url
+                self.alignment = alignment
+                self.backgroundColor = backgroundColor
+                self.platform = platform
+            }
+            public enum CodingKeys: String, CodingKey {
+                case url
+                case alignment
+                case backgroundColor
+                case platform
+            }
+        }
         /// - Remark: Generated from `#/components/schemas/Feature`.
         public struct Feature: Codable, Hashable, Sendable {
             /// Computed identifier from image, title, and subtitle
@@ -465,25 +514,8 @@ public enum Components {
             ///
             /// - Remark: Generated from `#/components/schemas/Feature/illustrationUrl`.
             public var illustrationUrl: Swift.String?
-            /// URL for the features screenshot
-            ///
-            /// - Remark: Generated from `#/components/schemas/Feature/screenshotUrl`.
-            public var screenshotUrl: Swift.String?
-            /// Vertical alignment of the screenshot
-            ///
-            /// - Remark: Generated from `#/components/schemas/Feature/screenshotAlignment`.
-            @frozen public enum screenshotAlignmentPayload: String, Codable, Hashable, Sendable, CaseIterable {
-                case top = "top"
-                case bottom = "bottom"
-            }
-            /// Vertical alignment of the screenshot
-            ///
-            /// - Remark: Generated from `#/components/schemas/Feature/screenshotAlignment`.
-            public var screenshotAlignment: Components.Schemas.Feature.screenshotAlignmentPayload?
-            /// Background color value in hex format without
-            ///
-            /// - Remark: Generated from `#/components/schemas/Feature/backgroundColor`.
-            public var backgroundColor: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/Feature/screenshots`.
+            public var screenshots: [Components.Schemas.Screenshot]
             /// Creates a new `Feature`.
             ///
             /// - Parameters:
@@ -495,9 +527,7 @@ public enum Components {
             ///   - textAlignment: Alignment of the text content
             ///   - iconUrl: URL for the features icon
             ///   - illustrationUrl: URL for the features icon
-            ///   - screenshotUrl: URL for the features screenshot
-            ///   - screenshotAlignment: Vertical alignment of the screenshot
-            ///   - backgroundColor: Background color value in hex format without
+            ///   - screenshots:
             public init(
                 id: Swift.String,
                 title: Swift.String,
@@ -507,9 +537,7 @@ public enum Components {
                 textAlignment: Components.Schemas.Feature.textAlignmentPayload,
                 iconUrl: Swift.String? = nil,
                 illustrationUrl: Swift.String? = nil,
-                screenshotUrl: Swift.String? = nil,
-                screenshotAlignment: Components.Schemas.Feature.screenshotAlignmentPayload? = nil,
-                backgroundColor: Swift.String? = nil
+                screenshots: [Components.Schemas.Screenshot]
             ) {
                 self.id = id
                 self.title = title
@@ -519,9 +547,7 @@ public enum Components {
                 self.textAlignment = textAlignment
                 self.iconUrl = iconUrl
                 self.illustrationUrl = illustrationUrl
-                self.screenshotUrl = screenshotUrl
-                self.screenshotAlignment = screenshotAlignment
-                self.backgroundColor = backgroundColor
+                self.screenshots = screenshots
             }
             public enum CodingKeys: String, CodingKey {
                 case id
@@ -532,15 +558,82 @@ public enum Components {
                 case textAlignment
                 case iconUrl
                 case illustrationUrl
-                case screenshotUrl
-                case screenshotAlignment
-                case backgroundColor
+                case screenshots
+            }
+        }
+        /// - Remark: Generated from `#/components/schemas/MainSection`.
+        public struct MainSection: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/MainSection/id`.
+            public var id: Swift.String
+            /// - Remark: Generated from `#/components/schemas/MainSection/type`.
+            @frozen public enum _typePayload: String, Codable, Hashable, Sendable, CaseIterable {
+                case _default = "default"
+            }
+            /// - Remark: Generated from `#/components/schemas/MainSection/type`.
+            public var _type: Components.Schemas.MainSection._typePayload
+            /// - Remark: Generated from `#/components/schemas/MainSection/title`.
+            public var title: Swift.String
+            /// - Remark: Generated from `#/components/schemas/MainSection/subtitle`.
+            public var subtitle: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/MainSection/description`.
+            public var description: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/MainSection/color`.
+            public var color: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/MainSection/columns`.
+            public var columns: Swift.Int?
+            /// - Remark: Generated from `#/components/schemas/MainSection/screenshots`.
+            public var screenshots: [Components.Schemas.Screenshot]?
+            /// - Remark: Generated from `#/components/schemas/MainSection/features`.
+            public var features: [Components.Schemas.Feature]
+            /// Creates a new `MainSection`.
+            ///
+            /// - Parameters:
+            ///   - id:
+            ///   - _type:
+            ///   - title:
+            ///   - subtitle:
+            ///   - description:
+            ///   - color:
+            ///   - columns:
+            ///   - screenshots:
+            ///   - features:
+            public init(
+                id: Swift.String,
+                _type: Components.Schemas.MainSection._typePayload,
+                title: Swift.String,
+                subtitle: Swift.String? = nil,
+                description: Swift.String? = nil,
+                color: Swift.String? = nil,
+                columns: Swift.Int? = nil,
+                screenshots: [Components.Schemas.Screenshot]? = nil,
+                features: [Components.Schemas.Feature]
+            ) {
+                self.id = id
+                self._type = _type
+                self.title = title
+                self.subtitle = subtitle
+                self.description = description
+                self.color = color
+                self.columns = columns
+                self.screenshots = screenshots
+                self.features = features
+            }
+            public enum CodingKeys: String, CodingKey {
+                case id
+                case _type = "type"
+                case title
+                case subtitle
+                case description
+                case color
+                case columns
+                case screenshots
+                case features
             }
         }
         /// - Remark: Generated from `#/components/schemas/Section`.
         public struct Section: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/Section/id`.
-            public var id: Swift.Int
+            public var id: Swift.String
             /// - Remark: Generated from `#/components/schemas/Section/type`.
             @frozen public enum _typePayload: String, Codable, Hashable, Sendable, CaseIterable {
                 case grid = "grid"
@@ -556,10 +649,10 @@ public enum Components {
             public var description: Swift.String?
             /// - Remark: Generated from `#/components/schemas/Section/color`.
             public var color: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/Section/gridColumns`.
-            public var gridColumns: Swift.Int?
-            /// - Remark: Generated from `#/components/schemas/Section/screenshotUrl`.
-            public var screenshotUrl: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/Section/columns`.
+            public var columns: Swift.Int?
+            /// - Remark: Generated from `#/components/schemas/Section/screenshots`.
+            public var screenshots: [Components.Schemas.Screenshot]?
             /// - Remark: Generated from `#/components/schemas/Section/features`.
             public var features: [Components.Schemas.Feature]
             /// Creates a new `Section`.
@@ -571,18 +664,18 @@ public enum Components {
             ///   - subtitle:
             ///   - description:
             ///   - color:
-            ///   - gridColumns:
-            ///   - screenshotUrl:
+            ///   - columns:
+            ///   - screenshots:
             ///   - features:
             public init(
-                id: Swift.Int,
+                id: Swift.String,
                 _type: Components.Schemas.Section._typePayload,
                 title: Swift.String,
                 subtitle: Swift.String? = nil,
                 description: Swift.String? = nil,
                 color: Swift.String? = nil,
-                gridColumns: Swift.Int? = nil,
-                screenshotUrl: Swift.String? = nil,
+                columns: Swift.Int? = nil,
+                screenshots: [Components.Schemas.Screenshot]? = nil,
                 features: [Components.Schemas.Feature]
             ) {
                 self.id = id
@@ -591,8 +684,8 @@ public enum Components {
                 self.subtitle = subtitle
                 self.description = description
                 self.color = color
-                self.gridColumns = gridColumns
-                self.screenshotUrl = screenshotUrl
+                self.columns = columns
+                self.screenshots = screenshots
                 self.features = features
             }
             public enum CodingKeys: String, CodingKey {
@@ -602,8 +695,8 @@ public enum Components {
                 case subtitle
                 case description
                 case color
-                case gridColumns
-                case screenshotUrl
+                case columns
+                case screenshots
                 case features
             }
         }
@@ -1140,7 +1233,7 @@ public enum Components {
                     /// General section
                     ///
                     /// - Remark: Generated from `#/components/responses/SectionsResponse/content/json/mainSection`.
-                    public var mainSection: Components.Schemas.Section
+                    public var mainSection: Components.Schemas.MainSection
                     /// Collection of sections
                     ///
                     /// - Remark: Generated from `#/components/responses/SectionsResponse/content/json/sections`.
@@ -1151,7 +1244,7 @@ public enum Components {
                     ///   - mainSection: General section
                     ///   - sections: Collection of sections
                     public init(
-                        mainSection: Components.Schemas.Section,
+                        mainSection: Components.Schemas.MainSection,
                         sections: [Components.Schemas.Section]
                     ) {
                         self.mainSection = mainSection
