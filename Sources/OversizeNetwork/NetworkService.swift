@@ -17,7 +17,7 @@ public struct NetworkService: Sendable {
         self.init(
             underlyingClient: Client(
                 serverURL: try! Servers.Server1.url(),
-                transport: URLSessionTransport()
+                transport: URLSessionTransport(),
             ))
     }
 
