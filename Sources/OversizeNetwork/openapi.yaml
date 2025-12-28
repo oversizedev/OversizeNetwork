@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.4.0
+  version: 1.6.0
   description: |-
     # OversizeAPI
 
@@ -47,6 +47,7 @@ paths:
         - apps
       parameters:
         - $ref: '#/components/parameters/Platforms'
+        - $ref: '#/components/parameters/AppsStatus'
       responses:
         '200':
           $ref: '#/components/responses/AppsResponse'
@@ -282,6 +283,17 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/PlatformType'
+    AppsStatus:
+      name: status
+      in: query
+      description: Filter applications by release status
+      schema:
+        type: string
+        enum:
+          - released
+          - draft
+          - all
+        default: released
     AppId:
       name: id
       in: path
@@ -361,10 +373,13 @@ components:
           type: string
           format: date-time
           example: '2022-08-15T10:30:00Z'
-        updatedAt:
+        releasedAt:
           type: string
           format: date-time
-          example: '2025-04-02T15:35:22Z'
+          example: '2025-08-15T10:30:00Z'
+        isHidden:
+          type: boolean
+          example: false
     Error:
       type: object
       required:
