@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.4.0
+  version: 1.8.0
   description: |-
     # OversizeAPI
 
@@ -47,11 +47,14 @@ paths:
         - apps
       parameters:
         - $ref: '#/components/parameters/Platforms'
+        - $ref: '#/components/parameters/AppStatus'
       responses:
         '200':
           $ref: '#/components/responses/AppsResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}:
@@ -61,8 +64,6 @@ paths:
       operationId: getApp
       tags:
         - apps
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
       responses:
@@ -70,6 +71,8 @@ paths:
           $ref: '#/components/responses/AppResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -81,26 +84,17 @@ paths:
       description: Get all features associated with a specific application
       tags:
         - apps
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
-        - name: context
-          required: false
-          in: query
-          description: Filter features by context
-          schema:
-            type: string
-            enum:
-              - paywall
-              - onboarding
-            example: paywall
+        - $ref: '#/components/parameters/FeatureContext'
       responses:
         '200':
           $ref: '#/components/responses/FeaturesResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -112,8 +106,6 @@ paths:
       description: Get all features associated with a specific application
       tags:
         - apps
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
@@ -122,6 +114,8 @@ paths:
           $ref: '#/components/responses/SectionsResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -133,8 +127,6 @@ paths:
       description: Retrieve application ads
       tags:
         - ads
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
@@ -143,6 +135,8 @@ paths:
           $ref: '#/components/responses/AdsResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -154,8 +148,6 @@ paths:
       description: Retrieve application ad
       tags:
         - ads
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
@@ -164,6 +156,8 @@ paths:
           $ref: '#/components/responses/AdResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -175,8 +169,6 @@ paths:
       description: Retrieve application In-AppPurchases products
       tags:
         - in-app-purchases
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/AppId'
       responses:
@@ -184,6 +176,8 @@ paths:
           $ref: '#/components/responses/InAppPurchaseResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -195,8 +189,6 @@ paths:
       operationId: getFeature
       tags:
         - features
-      security:
-        - ApiKeyAuth: []
       parameters:
         - $ref: '#/components/parameters/FeatureId'
       responses:
@@ -204,6 +196,8 @@ paths:
           $ref: '#/components/responses/FeatureResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -215,13 +209,13 @@ paths:
       description: Retrieve StoreKit offers
       tags:
         - in-app-purchases
-      security:
-        - ApiKeyAuth: []
       responses:
         '200':
           $ref: '#/components/responses/InAppPurchaseOffersResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '404':
           $ref: '#/components/responses/NotFoundResponse'
         '500':
@@ -231,12 +225,15 @@ paths:
       tags:
         - infos
       summary: Fetch info
+      description: Retrieve company and developer information including contact details and social media profiles
       operationId: getInfo
       responses:
         '200':
           $ref: '#/components/responses/InfoResponse'
         '400':
           $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/health-check:
@@ -246,6 +243,7 @@ paths:
       operationId: getHealthCheck
       tags:
         - system
+      security: []
       responses:
         '200':
           description: Service is healthy
@@ -274,14 +272,6 @@ components:
         type: string
         example: 1.2.3
       required: true
-    Platforms:
-      name: platforms
-      in: query
-      description: Filter by platforms
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/PlatformType'
     AppId:
       name: id
       in: path
@@ -298,6 +288,38 @@ components:
       schema:
         type: string
         example: '1'
+    Platforms:
+      name: platforms
+      in: query
+      required: false
+      description: Filter by platforms
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/PlatformType'
+    AppStatus:
+      name: status
+      in: query
+      required: false
+      description: Filter applications by release status
+      schema:
+        type: string
+        enum:
+          - released
+          - draft
+          - all
+        default: released
+    FeatureContext:
+      name: context
+      required: false
+      in: query
+      description: Filter features by context
+      schema:
+        type: string
+        enum:
+          - paywall
+          - onboarding
+        example: paywall
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -361,10 +383,13 @@ components:
           type: string
           format: date-time
           example: '2022-08-15T10:30:00Z'
-        updatedAt:
+        releasedAt:
           type: string
           format: date-time
-          example: '2025-04-02T15:35:22Z'
+          example: '2025-08-15T10:30:00Z'
+        isHidden:
+          type: boolean
+          example: false
     Error:
       type: object
       required:
@@ -461,6 +486,7 @@ components:
           example: https://cdn.oversize.design/assets/apps/dressweather/features/2.png
           description: URL for the features icon
         screenshots:
+          type: array
           items:
             $ref: '#/components/schemas/Screenshot'
     MainSection:
@@ -476,7 +502,7 @@ components:
           example: 0
         type:
           type: string
-          example: cards
+          example: default
           enum:
             - default
         title:
@@ -515,7 +541,7 @@ components:
           example: 0
         type:
           type: string
-          example: cards
+          example: grid
           enum:
             - grid
             - list
@@ -558,7 +584,7 @@ components:
         description:
           type: string
           example: Control weight easily, follow the successes of every month
-        iconURL:
+        iconUrl:
           type: string
           format: url
         priority:
@@ -606,7 +632,7 @@ components:
         description:
           type: string
           example: Get up to <salePercent>% off for <subscriptionName> subscription and Free full access for <freeDays> days
-        imageURL:
+        imageUrl:
           type: string
           format: url
         startDate:
@@ -631,6 +657,7 @@ components:
             type: string
     SocialNetwork:
       type: object
+      description: Social network profile information with links and branding
       required:
         - id
         - title
@@ -645,11 +672,15 @@ components:
           example: aromanov91
         url:
           type: string
+          format: url
           example: https://www.facebook.com/aromanov91
         iconUrl:
           type: string
+          format: url
           example: https://cdn.oversize.design/assets/icons/brands/dribbble.svg
     Developer:
+      type: object
+      description: Developer contact information and social media profiles
       required:
         - email
         - name
@@ -658,18 +689,22 @@ components:
       properties:
         email:
           type: string
+          format: email
           example: alexander@oversize.app
         name:
           type: string
           example: Alexander Romanov
         socialNetworks:
+          type: array
           items:
             $ref: '#/components/schemas/SocialNetwork'
         url:
           type: string
+          format: url
           example: https://romanov.cc
-      type: object
     Company:
+      type: object
+      description: Company information including contact details and App Store presence
       required:
         - name
         - url
@@ -686,17 +721,19 @@ components:
           example: https://oversize.app
         email:
           type: string
+          format: email
           example: support@oversize.design
         supportEmail:
           type: string
+          format: email
           example: support@oversize.design
         appStoreId:
           type: string
           example: '1459928735'
         socialNetworks:
+          type: array
           items:
             $ref: '#/components/schemas/SocialNetwork'
-      type: object
   responses:
     AppsResponse:
       description: List of applications
@@ -750,6 +787,16 @@ components:
             error: validation_error
             code: invalid_parameter
             message: Bad request
+    UnauthorizedResponse:
+      description: Unauthorized - Invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            error: authentication_error
+            code: unauthorized
+            message: Invalid or missing API key
     InternalServerErrorResponse:
       description: Internal server error
       content:
@@ -773,6 +820,17 @@ components:
               app:
                 $ref: '#/components/schemas/App'
                 description: Single application details
+            example:
+              app:
+                id: '6443709281'
+                name: Scale Down
+                title: Control weight easily, follow the successes of every month
+                subtitle: It is very difficult to reset everything, but if you move in small steps every day, then it is easier to reach the goal
+                description: All data is saved in the phone or is possible synchronization with iCloud
+                address: scaledown
+                termsDate: '2022-01-06'
+                platforms:
+                  - iOS
     NotFoundResponse:
       description: Not found
       content:
@@ -795,9 +853,29 @@ components:
             properties:
               features:
                 type: array
-                description: Collection of sections
+                description: Collection of features
                 items:
                   $ref: '#/components/schemas/Feature'
+            example:
+              features:
+                - id: '1'
+                  title: No Ads
+                  subtitle: Advertising will not be displayed
+                  description: Enjoy an ad-free experience while using the app.
+                  textSize: medium
+                  textAlignment: center
+                  iconUrl: https://cdn.oversize.design/assets/icons/iconly/star.svg
+                  illustrationUrl: https://cdn.oversize.design/assets/illustrations/objects/tools/speaker/large.png
+                  screenshots: []
+                - id: '4'
+                  title: Sync with iCloud
+                  subtitle: Data will not be lost
+                  description: Automatically sync your data with iCloud to keep it safe and accessible across devices.
+                  textSize: medium
+                  textAlignment: center
+                  iconUrl: https://cdn.oversize.design/assets/icons/iconly/star.svg
+                  illustrationUrl: https://cdn.oversize.design/assets/illustrations/objects/tools/cloud/large.png
+                  screenshots: []
     SectionsResponse:
       description: List of features sections
       content:
@@ -817,6 +895,25 @@ components:
                 description: Collection of sections
                 items:
                   $ref: '#/components/schemas/Section'
+            example:
+              mainSection:
+                id: main
+                type: default
+                title: Main
+                screenshots:
+                  - url: https://cdn.oversize.design/assets/apps/scaledown/screenshots/1.png
+                    alignment: top
+                    platform: iOS
+                features: []
+              sections:
+                - id: premium
+                  title: Premium Features
+                  subtitle: Unlock all features
+                  features:
+                    - id: '1'
+                      title: No Ads
+                      textSize: medium
+                      textAlignment: center
     AdsResponse:
       description: List of app ads
       content:
@@ -832,6 +929,18 @@ components:
                 description: Collection of ads
                 items:
                   $ref: '#/components/schemas/Ad'
+            example:
+              ads:
+                - id: 6444375229
+                  title: Secret Photo
+                  description: Don't be afraid for your secrets to be exposed
+                  iconUrl: https://cdn.oversize.design/assets/apps/secretphoto/icon.png
+                  priority: 1
+                - id: 6446330334
+                  title: Med History
+                  description: Take charge of your health
+                  iconUrl: https://cdn.oversize.design/assets/apps/medhistory/icon.png
+                  priority: 5
     AdResponse:
       description: Ad
       content:
@@ -845,6 +954,13 @@ components:
               ad:
                 description: App Ad
                 $ref: '#/components/schemas/Ad'
+            example:
+              ad:
+                id: 6444375229
+                title: Secret Photo
+                description: Don't be afraid for your secrets to be exposed
+                iconUrl: https://cdn.oversize.design/assets/apps/secretphoto/icon.png
+                priority: 1
     InAppPurchaseResponse:
       description: Response containing in-app purchase product IDs and banner information
       content:
@@ -861,6 +977,14 @@ components:
                   type: string
               banner:
                 $ref: '#/components/schemas/InAppPurchaseBanner'
+            example:
+              productIds:
+                - premium_yearly
+                - premium_monthly
+                - premium_lifetime
+              banner:
+                title: Unlock Premium Features
+                subtitle: Get full access to all features
     FeatureResponse:
       description: Feature
       content:
@@ -874,6 +998,17 @@ components:
               feature:
                 $ref: '#/components/schemas/Feature'
                 description: Single feature details
+            example:
+              feature:
+                id: '1'
+                title: No Ads
+                subtitle: Advertising will not be displayed
+                description: Enjoy an ad-free experience while using the app.
+                textSize: medium
+                textAlignment: center
+                iconUrl: https://cdn.oversize.design/assets/icons/iconly/star.svg
+                illustrationUrl: https://cdn.oversize.design/assets/illustrations/objects/tools/speaker/large.png
+                screenshots: []
     InAppPurchaseOffersResponse:
       description: List of offers
       content:
@@ -886,9 +1021,21 @@ components:
             properties:
               offers:
                 type: array
-                description: Collection of sections
+                description: Collection of offers
                 items:
                   $ref: '#/components/schemas/InAppPurchaseOffer'
+            example:
+              offers:
+                - id: 1
+                  badge: Black Friday
+                  title: Black Friday
+                  headline: 'Biggest Sale: 50% OFF'
+                  description: Get up to 50% off for Premium subscription and Free full access for 7 days
+                  imageUrl: https://cdn.oversize.design/assets/illustrations/objects/sales/gift/large.png
+                  startDate: '2023-11-24T00:00:00Z'
+                  endDate: '2023-11-26T23:59:59Z'
+                  accentColor: '000000'
+                  effect: snow
     InfoResponse:
       description: Info
       content:
@@ -904,3 +1051,24 @@ components:
                 $ref: '#/components/schemas/Developer'
               company:
                 $ref: '#/components/schemas/Company'
+            example:
+              company:
+                name: Oversize
+                url: https://oversize.app
+                email: support@oversize.design
+                supportEmail: support@oversize.design
+                appStoreId: '1459928735'
+                socialNetworks:
+                  - id: aromanov91
+                    title: facebook
+                    url: https://www.facebook.com/aromanov91
+                    iconUrl: https://cdn.oversize.design/assets/icons/brands/facebook.svg
+              developer:
+                name: Alexander Romanov
+                email: alexander@oversize.app
+                url: https://romanov.cc
+                socialNetworks:
+                  - id: aromanov91
+                    title: facebook
+                    url: https://www.facebook.com/aromanov91
+                    iconUrl: https://cdn.oversize.design/assets/icons/brands/facebook.svg
