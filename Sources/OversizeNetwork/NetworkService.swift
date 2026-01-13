@@ -151,6 +151,8 @@ public struct NetworkService: Sendable {
                 }
             case .undocumented, .badRequest, .internalServerError, .notFound:
                 return .failure(.network(type: .unexpectedStatusCode))
+            case .unauthorized:
+                return .failure(.network(type: .unauthorized))
             }
         } catch {
             return .failure(.network(type: .unknown))

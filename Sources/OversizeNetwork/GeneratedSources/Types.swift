@@ -76,6 +76,8 @@ public protocol APIProtocol: Sendable {
     func getInAppPurchaseOffers(_ input: Operations.getInAppPurchaseOffers.Input) async throws -> Operations.getInAppPurchaseOffers.Output
     /// Fetch info
     ///
+    /// Retrieve company and developer information including contact details and social media profiles
+    ///
     /// - Remark: HTTP `GET /v1/infos`.
     /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
     func getInfo(_ input: Operations.getInfo.Input) async throws -> Operations.getInfo.Output
@@ -229,6 +231,8 @@ extension APIProtocol {
     }
     /// Fetch info
     ///
+    /// Retrieve company and developer information including contact details and social media profiles
+    ///
     /// - Remark: HTTP `GET /v1/infos`.
     /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
     public func getInfo(headers: Operations.getInfo.Input.Headers = .init()) async throws -> Operations.getInfo.Output {
@@ -321,8 +325,10 @@ public enum Components {
             public var platforms: [Components.Schemas.PlatformType]?
             /// - Remark: Generated from `#/components/schemas/App/createdAt`.
             public var createdAt: Foundation.Date?
-            /// - Remark: Generated from `#/components/schemas/App/updatedAt`.
-            public var updatedAt: Foundation.Date?
+            /// - Remark: Generated from `#/components/schemas/App/releasedAt`.
+            public var releasedAt: Foundation.Date?
+            /// - Remark: Generated from `#/components/schemas/App/isHidden`.
+            public var isHidden: Swift.Bool?
             /// Creates a new `App`.
             ///
             /// - Parameters:
@@ -337,7 +343,8 @@ public enum Components {
             ///   - termsAdditions:
             ///   - platforms:
             ///   - createdAt:
-            ///   - updatedAt:
+            ///   - releasedAt:
+            ///   - isHidden:
             public init(
                 id: Swift.String,
                 iconUrl: Swift.String? = nil,
@@ -350,7 +357,8 @@ public enum Components {
                 termsAdditions: [Swift.String]? = nil,
                 platforms: [Components.Schemas.PlatformType]? = nil,
                 createdAt: Foundation.Date? = nil,
-                updatedAt: Foundation.Date? = nil
+                releasedAt: Foundation.Date? = nil,
+                isHidden: Swift.Bool? = nil
             ) {
                 self.id = id
                 self.iconUrl = iconUrl
@@ -363,7 +371,8 @@ public enum Components {
                 self.termsAdditions = termsAdditions
                 self.platforms = platforms
                 self.createdAt = createdAt
-                self.updatedAt = updatedAt
+                self.releasedAt = releasedAt
+                self.isHidden = isHidden
             }
             public enum CodingKeys: String, CodingKey {
                 case id
@@ -377,7 +386,8 @@ public enum Components {
                 case termsAdditions
                 case platforms
                 case createdAt
-                case updatedAt
+                case releasedAt
+                case isHidden
             }
         }
         /// - Remark: Generated from `#/components/schemas/Error`.
@@ -708,8 +718,8 @@ public enum Components {
             public var title: Swift.String
             /// - Remark: Generated from `#/components/schemas/Ad/description`.
             public var description: Swift.String
-            /// - Remark: Generated from `#/components/schemas/Ad/iconURL`.
-            public var iconURL: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/Ad/iconUrl`.
+            public var iconUrl: Swift.String?
             /// - Remark: Generated from `#/components/schemas/Ad/priority`.
             public var priority: Swift.Int?
             /// Creates a new `Ad`.
@@ -718,26 +728,26 @@ public enum Components {
             ///   - id:
             ///   - title:
             ///   - description:
-            ///   - iconURL:
+            ///   - iconUrl:
             ///   - priority:
             public init(
                 id: Swift.Int,
                 title: Swift.String,
                 description: Swift.String,
-                iconURL: Swift.String? = nil,
+                iconUrl: Swift.String? = nil,
                 priority: Swift.Int? = nil
             ) {
                 self.id = id
                 self.title = title
                 self.description = description
-                self.iconURL = iconURL
+                self.iconUrl = iconUrl
                 self.priority = priority
             }
             public enum CodingKeys: String, CodingKey {
                 case id
                 case title
                 case description
-                case iconURL
+                case iconUrl
                 case priority
             }
         }
@@ -788,8 +798,8 @@ public enum Components {
             public var headline: Swift.String?
             /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/description`.
             public var description: Swift.String?
-            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/imageURL`.
-            public var imageURL: Swift.String?
+            /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/imageUrl`.
+            public var imageUrl: Swift.String?
             /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/startDate`.
             public var startDate: Foundation.Date
             /// - Remark: Generated from `#/components/schemas/InAppPurchaseOffer/endDate`.
@@ -812,7 +822,7 @@ public enum Components {
             ///   - title:
             ///   - headline:
             ///   - description:
-            ///   - imageURL:
+            ///   - imageUrl:
             ///   - startDate:
             ///   - endDate:
             ///   - accentColor:
@@ -824,7 +834,7 @@ public enum Components {
                 title: Swift.String,
                 headline: Swift.String? = nil,
                 description: Swift.String? = nil,
-                imageURL: Swift.String? = nil,
+                imageUrl: Swift.String? = nil,
                 startDate: Foundation.Date,
                 endDate: Foundation.Date,
                 accentColor: Swift.String? = nil,
@@ -836,7 +846,7 @@ public enum Components {
                 self.title = title
                 self.headline = headline
                 self.description = description
-                self.imageURL = imageURL
+                self.imageUrl = imageUrl
                 self.startDate = startDate
                 self.endDate = endDate
                 self.accentColor = accentColor
@@ -849,7 +859,7 @@ public enum Components {
                 case title
                 case headline
                 case description
-                case imageURL
+                case imageUrl
                 case startDate
                 case endDate
                 case accentColor
@@ -857,6 +867,8 @@ public enum Components {
                 case region
             }
         }
+        /// Social network profile information with links and branding
+        ///
         /// - Remark: Generated from `#/components/schemas/SocialNetwork`.
         public struct SocialNetwork: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/SocialNetwork/title`.
@@ -892,6 +904,8 @@ public enum Components {
                 case iconUrl
             }
         }
+        /// Developer contact information and social media profiles
+        ///
         /// - Remark: Generated from `#/components/schemas/Developer`.
         public struct Developer: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/Developer/email`.
@@ -927,6 +941,8 @@ public enum Components {
                 case url
             }
         }
+        /// Company information including contact details and App Store presence
+        ///
         /// - Remark: Generated from `#/components/schemas/Company`.
         public struct Company: Codable, Hashable, Sendable {
             /// - Remark: Generated from `#/components/schemas/Company/name`.
@@ -981,10 +997,6 @@ public enum Components {
         ///
         /// - Remark: Generated from `#/components/parameters/AppVersion`.
         public typealias AppVersion = Swift.String
-        /// Filter by platforms
-        ///
-        /// - Remark: Generated from `#/components/parameters/Platforms`.
-        public typealias Platforms = [Components.Schemas.PlatformType]
         /// Application ID
         ///
         /// - Remark: Generated from `#/components/parameters/AppId`.
@@ -993,6 +1005,37 @@ public enum Components {
         ///
         /// - Remark: Generated from `#/components/parameters/FeatureId`.
         public typealias FeatureId = Swift.String
+        /// Filter by platforms
+        ///
+        /// - Remark: Generated from `#/components/parameters/Platforms`.
+        public typealias Platforms = [Components.Schemas.PlatformType]
+        /// Filter applications by release status
+        ///
+        /// - Remark: Generated from `#/components/parameters/AppStatus`.
+        @frozen public enum AppStatus: String, Codable, Hashable, Sendable, CaseIterable {
+            case released = "released"
+            case draft = "draft"
+            case all = "all"
+        }
+        /// Filter features by context
+        ///
+        /// - Remark: Generated from `#/components/parameters/FeatureContext`.
+        @frozen public enum FeatureContext: String, Codable, Hashable, Sendable, CaseIterable {
+            case paywall = "paywall"
+            case onboarding = "onboarding"
+        }
+        /// Bundle identifier in reverse domain notation
+        ///
+        /// - Remark: Generated from `#/components/parameters/BundleId`.
+        public typealias BundleId = Swift.String
+        /// Preferred language for response content
+        ///
+        /// - Remark: Generated from `#/components/parameters/AcceptLanguage`.
+        public typealias AcceptLanguage = Swift.String
+        /// Apple App Store application identifier
+        ///
+        /// - Remark: Generated from `#/components/parameters/AppStoreId`.
+        public typealias AppStoreId = Swift.String
     }
     /// Types generated from the `#/components/requestBodies` section of the OpenAPI document.
     public enum RequestBodies {}
@@ -1070,6 +1113,34 @@ public enum Components {
             /// - Parameters:
             ///   - body: Received HTTP response body
             public init(body: Components.Responses.BadRequestResponse.Body) {
+                self.body = body
+            }
+        }
+        public struct UnauthorizedResponse: Sendable, Hashable {
+            /// - Remark: Generated from `#/components/responses/UnauthorizedResponse/content`.
+            @frozen public enum Body: Sendable, Hashable {
+                /// - Remark: Generated from `#/components/responses/UnauthorizedResponse/content/application\/json`.
+                case json(Components.Schemas._Error)
+                /// The associated value of the enum case if `self` is `.json`.
+                ///
+                /// - Throws: An error if `self` is not `.json`.
+                /// - SeeAlso: `.json`.
+                public var json: Components.Schemas._Error {
+                    get throws {
+                        switch self {
+                        case let .json(body):
+                            return body
+                        }
+                    }
+                }
+            }
+            /// Received HTTP response body
+            public var body: Components.Responses.UnauthorizedResponse.Body
+            /// Creates a new `UnauthorizedResponse`.
+            ///
+            /// - Parameters:
+            ///   - body: Received HTTP response body
+            public init(body: Components.Responses.UnauthorizedResponse.Body) {
                 self.body = body
             }
         }
@@ -1183,14 +1254,14 @@ public enum Components {
                 ///
                 /// - Remark: Generated from `#/components/responses/FeaturesResponse/content/json`.
                 public struct jsonPayload: Codable, Hashable, Sendable {
-                    /// Collection of sections
+                    /// Collection of features
                     ///
                     /// - Remark: Generated from `#/components/responses/FeaturesResponse/content/json/features`.
                     public var features: [Components.Schemas.Feature]
                     /// Creates a new `jsonPayload`.
                     ///
                     /// - Parameters:
-                    ///   - features: Collection of sections
+                    ///   - features: Collection of features
                     public init(features: [Components.Schemas.Feature]) {
                         self.features = features
                     }
@@ -1479,14 +1550,14 @@ public enum Components {
                 ///
                 /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content/json`.
                 public struct jsonPayload: Codable, Hashable, Sendable {
-                    /// Collection of sections
+                    /// Collection of offers
                     ///
                     /// - Remark: Generated from `#/components/responses/InAppPurchaseOffersResponse/content/json/offers`.
                     public var offers: [Components.Schemas.InAppPurchaseOffer]
                     /// Creates a new `jsonPayload`.
                     ///
                     /// - Parameters:
-                    ///   - offers: Collection of sections
+                    ///   - offers: Collection of offers
                     public init(offers: [Components.Schemas.InAppPurchaseOffer]) {
                         self.offers = offers
                     }
@@ -1594,23 +1665,68 @@ public enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/GET/query/platforms`.
                 public var platforms: Components.Parameters.Platforms?
+                /// - Remark: Generated from `#/components/parameters/AppStatus`.
+                @frozen public enum AppStatus: String, Codable, Hashable, Sendable, CaseIterable {
+                    case released = "released"
+                    case draft = "draft"
+                    case all = "all"
+                }
+                /// Filter applications by release status
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/query/status`.
+                public var status: Components.Parameters.AppStatus?
                 /// Creates a new `Query`.
                 ///
                 /// - Parameters:
                 ///   - platforms: Filter by platforms
-                public init(platforms: Components.Parameters.Platforms? = nil) {
+                ///   - status: Filter applications by release status
+                public init(
+                    platforms: Components.Parameters.Platforms? = nil,
+                    status: Components.Parameters.AppStatus? = nil
+                ) {
                     self.platforms = platforms
+                    self.status = status
                 }
             }
             public var query: Operations.getApps.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApps.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApps.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApps.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -1670,6 +1786,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/get(getApps)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -1755,12 +1894,42 @@ public enum Operations {
             public var path: Operations.getApp.Input.Path
             /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApp.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApp.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getApp.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -1820,6 +1989,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/get(getApp)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -1932,15 +2124,15 @@ public enum Operations {
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/platforms`.
                 public var platforms: Components.Parameters.Platforms?
-                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/context`.
-                @frozen public enum contextPayload: String, Codable, Hashable, Sendable, CaseIterable {
+                /// - Remark: Generated from `#/components/parameters/FeatureContext`.
+                @frozen public enum FeatureContext: String, Codable, Hashable, Sendable, CaseIterable {
                     case paywall = "paywall"
                     case onboarding = "onboarding"
                 }
                 /// Filter features by context
                 ///
                 /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/query/context`.
-                public var context: Operations.getAppFeatures.Input.Query.contextPayload?
+                public var context: Components.Parameters.FeatureContext?
                 /// Creates a new `Query`.
                 ///
                 /// - Parameters:
@@ -1948,7 +2140,7 @@ public enum Operations {
                 ///   - context: Filter features by context
                 public init(
                     platforms: Components.Parameters.Platforms? = nil,
-                    context: Operations.getAppFeatures.Input.Query.contextPayload? = nil
+                    context: Components.Parameters.FeatureContext? = nil
                 ) {
                     self.platforms = platforms
                     self.context = context
@@ -1957,12 +2149,42 @@ public enum Operations {
             public var query: Operations.getAppFeatures.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeatures.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeatures.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeatures.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2025,6 +2247,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/features/get(getAppFeatures)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -2148,12 +2393,42 @@ public enum Operations {
             public var query: Operations.getAppFeaturesSections.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/features/sections/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeaturesSections.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeaturesSections.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppFeaturesSections.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2216,6 +2491,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/features/sections/get(getAppFeaturesSections)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -2339,12 +2637,42 @@ public enum Operations {
             public var query: Operations.getAppAds.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ads/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAds.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAds.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAds.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2407,6 +2735,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ads/get(getAppAds)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -2530,12 +2881,42 @@ public enum Operations {
             public var query: Operations.getAppAd.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/ad/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAd.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAd.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getAppAd.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2598,6 +2979,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/ad/get(getAppAd)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -2706,12 +3110,42 @@ public enum Operations {
             public var path: Operations.getInAppPurchases.Input.Path
             /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/in-app-purchases/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchases.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchases.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchases.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2771,6 +3205,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/apps/{id}/in-app-purchases/get(getInAppPurchases)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -2879,12 +3336,42 @@ public enum Operations {
             public var path: Operations.getFeature.Input.Path
             /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/features/{id}/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getFeature.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getFeature.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getFeature.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -2944,6 +3431,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/features/{id}/get(getFeature)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -3037,12 +3547,42 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/in-app-purchases/offers/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchaseOffers.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchaseOffers.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInAppPurchaseOffers.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -3097,6 +3637,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/in-app-purchases/offers/get(getInAppPurchaseOffers)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
@@ -3181,6 +3744,8 @@ public enum Operations {
     }
     /// Fetch info
     ///
+    /// Retrieve company and developer information including contact details and social media profiles
+    ///
     /// - Remark: HTTP `GET /v1/infos`.
     /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)`.
     public enum getInfo {
@@ -3188,12 +3753,42 @@ public enum Operations {
         public struct Input: Sendable, Hashable {
             /// - Remark: Generated from `#/paths/v1/infos/GET/header`.
             public struct Headers: Sendable, Hashable {
+                /// Client application version
+                ///
+                /// - Remark: Generated from `#/paths/v1/infos/GET/header/App-Version`.
+                public var App_hyphen_Version: Components.Parameters.AppVersion?
+                /// Bundle identifier in reverse domain notation
+                ///
+                /// - Remark: Generated from `#/paths/v1/infos/GET/header/App-Bundle-ID`.
+                public var App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId?
+                /// Preferred language for response content
+                ///
+                /// - Remark: Generated from `#/paths/v1/infos/GET/header/Accept-Language`.
+                public var Accept_hyphen_Language: Components.Parameters.AcceptLanguage?
+                /// Apple App Store application identifier
+                ///
+                /// - Remark: Generated from `#/paths/v1/infos/GET/header/App-Store-ID`.
+                public var App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId?
                 public var accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInfo.AcceptableContentType>]
                 /// Creates a new `Headers`.
                 ///
                 /// - Parameters:
+                ///   - App_hyphen_Version: Client application version
+                ///   - App_hyphen_Bundle_hyphen_ID: Bundle identifier in reverse domain notation
+                ///   - Accept_hyphen_Language: Preferred language for response content
+                ///   - App_hyphen_Store_hyphen_ID: Apple App Store application identifier
                 ///   - accept:
-                public init(accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInfo.AcceptableContentType>] = .defaultValues()) {
+                public init(
+                    App_hyphen_Version: Components.Parameters.AppVersion? = nil,
+                    App_hyphen_Bundle_hyphen_ID: Components.Parameters.BundleId? = nil,
+                    Accept_hyphen_Language: Components.Parameters.AcceptLanguage? = nil,
+                    App_hyphen_Store_hyphen_ID: Components.Parameters.AppStoreId? = nil,
+                    accept: [OpenAPIRuntime.AcceptHeaderContentType<Operations.getInfo.AcceptableContentType>] = .defaultValues()
+                ) {
+                    self.App_hyphen_Version = App_hyphen_Version
+                    self.App_hyphen_Bundle_hyphen_ID = App_hyphen_Bundle_hyphen_ID
+                    self.Accept_hyphen_Language = Accept_hyphen_Language
+                    self.App_hyphen_Store_hyphen_ID = App_hyphen_Store_hyphen_ID
                     self.accept = accept
                 }
             }
@@ -3248,6 +3843,29 @@ public enum Operations {
                     default:
                         try throwUnexpectedResponseStatus(
                             expectedStatus: "badRequest",
+                            response: self
+                        )
+                    }
+                }
+            }
+            /// Unauthorized - Invalid or missing API key
+            ///
+            /// - Remark: Generated from `#/paths//v1/infos/get(getInfo)/responses/401`.
+            ///
+            /// HTTP response code: `401 unauthorized`.
+            case unauthorized(Components.Responses.UnauthorizedResponse)
+            /// The associated value of the enum case if `self` is `.unauthorized`.
+            ///
+            /// - Throws: An error if `self` is not `.unauthorized`.
+            /// - SeeAlso: `.unauthorized`.
+            public var unauthorized: Components.Responses.UnauthorizedResponse {
+                get throws {
+                    switch self {
+                    case let .unauthorized(response):
+                        return response
+                    default:
+                        try throwUnexpectedResponseStatus(
+                            expectedStatus: "unauthorized",
                             response: self
                         )
                     }
