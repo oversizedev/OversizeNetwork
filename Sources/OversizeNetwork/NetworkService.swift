@@ -10,6 +10,19 @@ import OversizeModels
 
 public struct NetworkService: Sendable {
     private let client: any APIProtocol
+    private static let cache = URLCache(
+        memoryCapacity: 50 * 1024 * 1024,
+        diskCapacity: 200 * 1024 * 1024,
+        diskPath: "OversizeNetworkCache",
+    )
+
+    private static func makeTransport() -> URLSessionTransport {
+        let configuration = URLSessionConfiguration.default
+        configuration.urlCache = cache
+        configuration.requestCachePolicy = .useProtocolCachePolicy
+        let session = URLSession(configuration: configuration)
+        return URLSessionTransport(configuration: .init(session: session))
+    }
 
     init(underlyingClient: any APIProtocol) { client = underlyingClient }
 
@@ -17,7 +30,7 @@ public struct NetworkService: Sendable {
         self.init(
             underlyingClient: Client(
                 serverURL: try! Servers.Server1.url(),
-                transport: URLSessionTransport(),
+                transport: Self.makeTransport(),
             ))
     }
 
