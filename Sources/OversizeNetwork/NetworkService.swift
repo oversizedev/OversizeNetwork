@@ -6,7 +6,7 @@
 import Foundation
 import OpenAPIRuntime
 import OpenAPIURLSession
-import OversizeModels
+import OversizeCore
 
 public struct NetworkService: Sendable {
     private let client: any APIProtocol
@@ -24,17 +24,26 @@ public struct NetworkService: Sendable {
         return URLSessionTransport(configuration: .init(session: session))
     }
 
-    init(underlyingClient: any APIProtocol) { client = underlyingClient }
+    init(underlyingClient: any APIProtocol) {
+        client = underlyingClient
+    }
 
     public init() {
+        self.init(headers: .init())
+    }
+
+    public init(headers: RequestHeaders) {
+        let headersStore = RequestHeadersStore(headers: headers)
         self.init(
             underlyingClient: Client(
                 serverURL: try! Servers.Server1.url(),
                 transport: Self.makeTransport(),
-            ))
+                middlewares: [RequestHeadersMiddleware(store: headersStore)],
+            ),
+        )
     }
 
-    public func fetchApps() async -> Result<[Components.Schemas.App], AppError> {
+    public func fetchApps() async -> Result<[Components.Schemas.App], Error> {
         do {
             let response = try await client.getApps()
             switch response {
@@ -44,14 +53,14 @@ public struct NetworkService: Sendable {
                     return .success(apps.apps)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchCompany() async -> Result<Components.Schemas.Company, AppError> {
+    public func fetchCompany() async -> Result<Components.Schemas.Company, Error> {
         do {
             let response = try await client.getInfo(.init())
             switch response {
@@ -61,14 +70,14 @@ public struct NetworkService: Sendable {
                     return .success(info.company)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchDeveloper() async -> Result<Components.Schemas.Developer, AppError> {
+    public func fetchDeveloper() async -> Result<Components.Schemas.Developer, Error> {
         do {
             let response = try await client.getInfo(.init())
             switch response {
@@ -78,14 +87,14 @@ public struct NetworkService: Sendable {
                     return .success(info.developer)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchInfo() async -> Result<InfoResponse, AppError> {
+    public func fetchInfo() async -> Result<InfoResponse, Error> {
         do {
             let response = try await client.getInfo(.init())
             switch response {
@@ -95,14 +104,14 @@ public struct NetworkService: Sendable {
                     return .success(info)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchApp(appId: String) async -> Result<Components.Schemas.App, AppError> {
+    public func fetchApp(appId: String) async -> Result<Components.Schemas.App, Error> {
         do {
             let response = try await client.getApp(.init(path: .init(id: appId)))
             switch response {
@@ -112,14 +121,14 @@ public struct NetworkService: Sendable {
                     return .success(app.app)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchAds(appId: String) async -> Result<[Components.Schemas.Ad], AppError> {
+    public func fetchAds(appId: String) async -> Result<[Components.Schemas.Ad], Error> {
         do {
             let response = try await client.getAppAds(.init(path: .init(id: appId)))
             switch response {
@@ -129,14 +138,14 @@ public struct NetworkService: Sendable {
                     return .success(ads.ads)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchAd(appId: String) async -> Result<Components.Schemas.Ad, AppError> {
+    public func fetchAd(appId: String) async -> Result<Components.Schemas.Ad, Error> {
         do {
             let response = try await client.getAppAd(.init(path: .init(id: appId)))
             switch response {
@@ -146,14 +155,14 @@ public struct NetworkService: Sendable {
                     return .success(ads.ad)
                 }
             default:
-                return .failure(.network(type: .unknown))
+                return .failure(NetworkError.unknown(nil))
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchSpecialOffers() async -> Result<[Components.Schemas.InAppPurchaseOffer], AppError> {
+    public func fetchSpecialOffers() async -> Result<[Components.Schemas.InAppPurchaseOffer], Error> {
         do {
             let response = try await client.getInAppPurchaseOffers()
             switch response {
@@ -163,16 +172,16 @@ public struct NetworkService: Sendable {
                     return .success(offers.offers)
                 }
             case .undocumented, .badRequest, .internalServerError, .notFound:
-                return .failure(.network(type: .unexpectedStatusCode))
+                return .failure(NetworkError.unexpectedStatusCode)
             case .unauthorized:
-                return .failure(.network(type: .unauthorized))
+                return .failure(NetworkError.unauthorized)
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchAppStoreProductIds(appId: String) async -> Result<[String], AppError> {
+    public func fetchAppStoreProductIds(appId: String) async -> Result<[String], Error> {
         do {
             let response = try await client.getInAppPurchases(.init(path: .init(id: appId)))
             switch response {
@@ -182,14 +191,14 @@ public struct NetworkService: Sendable {
                     return .success(productIds.productIds)
                 }
             default:
-                return .failure(.network(type: .unexpectedStatusCode))
+                return .failure(NetworkError.unexpectedStatusCode)
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchAppStoreBanner(appId: String) async -> Result<Components.Schemas.InAppPurchaseBanner, AppError> {
+    public func fetchAppStoreBanner(appId: String) async -> Result<Components.Schemas.InAppPurchaseBanner, Error> {
         do {
             let response = try await client.getInAppPurchases(.init(path: .init(id: appId)))
             switch response {
@@ -199,14 +208,14 @@ public struct NetworkService: Sendable {
                     return .success(productIds.banner)
                 }
             default:
-                return .failure(.network(type: .unexpectedStatusCode))
+                return .failure(NetworkError.unexpectedStatusCode)
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchInAppPurchases(appId: String) async -> Result<InAppPurchaseResponse, AppError> {
+    public func fetchInAppPurchases(appId: String) async -> Result<InAppPurchaseResponse, Error> {
         do {
             let response = try await client.getInAppPurchases(.init(path: .init(id: appId)))
             switch response {
@@ -216,14 +225,14 @@ public struct NetworkService: Sendable {
                     return .success(body)
                 }
             default:
-                return .failure(.network(type: .unexpectedStatusCode))
+                return .failure(NetworkError.unexpectedStatusCode)
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 
-    public func fetchPremiumFeatures(appId: String) async -> Result<[Components.Schemas.Feature], AppError> {
+    public func fetchPremiumFeatures(appId: String) async -> Result<[Components.Schemas.Feature], Error> {
         do {
             let response = try await client.getAppFeatures(.init(path: .init(id: appId), query: .init(context: .paywall)))
             switch response {
@@ -233,10 +242,10 @@ public struct NetworkService: Sendable {
                     return .success(productIds.features)
                 }
             default:
-                return .failure(.network(type: .unexpectedStatusCode))
+                return .failure(NetworkError.unexpectedStatusCode)
             }
         } catch {
-            return .failure(.network(type: .unknown))
+            return .failure(NetworkError.unknown(error))
         }
     }
 }
