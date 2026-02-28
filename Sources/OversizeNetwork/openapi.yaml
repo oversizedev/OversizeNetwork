@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.9.0
+  version: 1.10.0
   description: |-
     # OversizeAPI
 
@@ -361,6 +361,7 @@ components:
         enum:
           - paywall
           - onboarding
+          - showcase
         example: paywall
     BundleId:
       name: App-Bundle-ID
