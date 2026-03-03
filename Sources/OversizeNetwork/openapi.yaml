@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.11.0
+  version: 1.11.1
   description: |-
     # OversizeAPI
 
@@ -422,8 +422,14 @@ components:
           - onboarding
           - showcase
         example: paywall
-    BundleId:
-      $ref: '#/components/parameters/AppBundleId'
+    AppBundleId:
+      name: App-Bundle-ID
+      in: header
+      required: false
+      description: Bundle identifier in reverse domain notation
+      schema:
+        type: string
+        example: com.oversize.App
     AcceptLanguage:
       name: Accept-Language
       in: header
@@ -448,14 +454,6 @@ components:
       schema:
         type: string
         example: 2.1.0
-    AppBundleId:
-      name: App-Bundle-ID
-      in: header
-      required: false
-      description: Bundle identifier in reverse domain notation
-      schema:
-        type: string
-        example: com.oversize.App
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
