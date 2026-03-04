@@ -6,15 +6,18 @@ public struct RequestHeaders: Sendable {
     public var appBundleId: String?
     public var acceptLanguage: String?
     public var appStoreId: String?
+    public var appVersion: String?
 
     public init(
         appBundleId: String? = nil,
         acceptLanguage: String? = nil,
         appStoreId: String? = nil,
+        appVersion: String? = nil,
     ) {
         self.appBundleId = appBundleId
         self.acceptLanguage = acceptLanguage
         self.appStoreId = appStoreId
+        self.appVersion = appVersion
     }
 }
 
@@ -53,6 +56,7 @@ public struct RequestHeadersMiddleware: ClientMiddleware {
         applyHeaderIfMissing("App-Bundle-ID", value: headers.appBundleId, to: &request)
         applyHeaderIfMissing("Accept-Language", value: headers.acceptLanguage, to: &request)
         applyHeaderIfMissing("App-Store-ID", value: headers.appStoreId, to: &request)
+        applyHeaderIfMissing("App-Version", value: headers.appVersion, to: &request)
         return try await next(request, body, baseURL)
     }
 
