@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.9.0
+  version: 1.11.1
   description: |-
     # OversizeAPI
 
@@ -39,6 +39,11 @@ tags:
     description: System-related endpoints like health checks
 paths:
   /v1/apps:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       summary: List all applications
       description: Retrieves a list of all applications
@@ -46,12 +51,8 @@ paths:
       tags:
         - apps
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/Platforms'
         - $ref: '#/components/parameters/AppStatus'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/AppsResponse'
@@ -62,6 +63,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       summary: Get App Information
       description: Retrieve application
@@ -69,11 +75,7 @@ paths:
       tags:
         - apps
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/AppResponse'
@@ -86,6 +88,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/features:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getAppFeatures
       summary: Retrieve application features
@@ -93,13 +100,9 @@ paths:
       tags:
         - apps
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
         - $ref: '#/components/parameters/FeatureContext'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/FeaturesResponse'
@@ -112,6 +115,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/features/sections:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getAppFeaturesSections
       summary: Retrieve application features sections
@@ -119,12 +127,8 @@ paths:
       tags:
         - apps
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/SectionsResponse'
@@ -137,6 +141,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/ads:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getAppAds
       summary: Get all ads features associated with a specific application
@@ -144,12 +153,8 @@ paths:
       tags:
         - ads
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/AdsResponse'
@@ -162,6 +167,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/ad:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getAppAd
       summary: Get ad associated with a specific application
@@ -169,12 +179,8 @@ paths:
       tags:
         - ads
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
         - $ref: '#/components/parameters/Platforms'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/AdResponse'
@@ -186,7 +192,63 @@ paths:
           $ref: '#/components/responses/NotFoundResponse'
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/apps/{id}/updates:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
+    get:
+      operationId: getAppUpdates
+      summary: Retrieve application update history
+      description: Get all version updates associated with a specific application
+      tags:
+        - apps
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+      responses:
+        '200':
+          $ref: '#/components/responses/VersionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
+  /v1/apps/{id}/updates/{version}:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
+    get:
+      operationId: getAppUpdate
+      summary: Retrieve application version details
+      description: Get details for a specific version of an application
+      tags:
+        - apps
+      parameters:
+        - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Version'
+      responses:
+        '200':
+          $ref: '#/components/responses/VersionResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestResponse'
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundResponse'
+        '500':
+          $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/apps/{id}/in-app-purchases:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getInAppPurchases
       summary: Get all In-AppPurchases associated with a specific application
@@ -194,11 +256,7 @@ paths:
       tags:
         - in-app-purchases
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/AppId'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/InAppPurchaseResponse'
@@ -211,6 +269,11 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/features/{id}:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       summary: Get features
       description: Retrieve features
@@ -218,11 +281,7 @@ paths:
       tags:
         - features
       parameters:
-        - $ref: '#/components/parameters/AppVersion'
         - $ref: '#/components/parameters/FeatureId'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/FeatureResponse'
@@ -235,17 +294,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/in-app-purchases/offers:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       operationId: getInAppPurchaseOffers
       summary: Get all sale offers
       description: Retrieve StoreKit offers
       tags:
         - in-app-purchases
-      parameters:
-        - $ref: '#/components/parameters/AppVersion'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/InAppPurchaseOffersResponse'
@@ -258,17 +317,17 @@ paths:
         '500':
           $ref: '#/components/responses/InternalServerErrorResponse'
   /v1/infos:
+    parameters:
+      - $ref: '#/components/parameters/AppVersion'
+      - $ref: '#/components/parameters/AppBundleId'
+      - $ref: '#/components/parameters/AcceptLanguage'
+      - $ref: '#/components/parameters/AppStoreId'
     get:
       tags:
         - infos
       summary: Fetch info
       description: Retrieve company and developer information including contact details and social media profiles
       operationId: getInfo
-      parameters:
-        - $ref: '#/components/parameters/AppVersion'
-        - $ref: '#/components/parameters/BundleId'
-        - $ref: '#/components/parameters/AcceptLanguage'
-        - $ref: '#/components/parameters/AppStoreId'
       responses:
         '200':
           $ref: '#/components/responses/InfoResponse'
@@ -361,8 +420,9 @@ components:
         enum:
           - paywall
           - onboarding
+          - showcase
         example: paywall
-    BundleId:
+    AppBundleId:
       name: App-Bundle-ID
       in: header
       required: false
@@ -386,6 +446,14 @@ components:
       schema:
         type: string
         example: '1234567890'
+    Version:
+      name: version
+      in: path
+      required: true
+      description: Application version (semver)
+      schema:
+        type: string
+        example: 2.1.0
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -656,6 +724,25 @@ components:
         priority:
           type: integer
           example: 1
+    Version:
+      type: object
+      required:
+        - version
+        - features
+      properties:
+        version:
+          type: string
+          description: Version identifier (semver)
+          example: 2.1.0
+        whatsNew:
+          type: string
+          description: Summary of changes in this version
+          example: Performance improvements and bug fixes
+        features:
+          type: array
+          description: Features introduced or updated in this version
+          items:
+            $ref: '#/components/schemas/Feature'
     InAppPurchaseBanner:
       type: object
       required:
@@ -1027,6 +1114,57 @@ components:
                 description: Don't be afraid for your secrets to be exposed
                 iconUrl: https://cdn.oversize.design/assets/apps/secretphoto/icon.png
                 priority: 1
+    VersionsResponse:
+      description: List of application versions
+      content:
+        application/json:
+          schema:
+            type: object
+            description: List of application versions
+            required:
+              - versions
+            properties:
+              versions:
+                type: array
+                description: Collection of application versions
+                items:
+                  $ref: '#/components/schemas/Version'
+            example:
+              versions:
+                - version: 2.1.0
+                  whatsNew: Performance improvements and bug fixes
+                  features:
+                    - id: '1'
+                      title: No Ads
+                      textSize: medium
+                      textAlignment: center
+                      screenshots: []
+                - version: 2.0.0
+                  whatsNew: Major redesign with new features
+                  features: []
+    VersionResponse:
+      description: Application version details
+      content:
+        application/json:
+          schema:
+            type: object
+            description: Application version details
+            required:
+              - version
+            properties:
+              version:
+                $ref: '#/components/schemas/Version'
+                description: Single version details
+            example:
+              version:
+                version: 2.1.0
+                whatsNew: Performance improvements and bug fixes
+                features:
+                  - id: '1'
+                    title: No Ads
+                    textSize: medium
+                    textAlignment: center
+                    screenshots: []
     InAppPurchaseResponse:
       description: Response containing in-app purchase product IDs and banner information
       content:

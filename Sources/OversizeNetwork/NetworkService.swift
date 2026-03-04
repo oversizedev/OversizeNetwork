@@ -248,4 +248,38 @@ public struct NetworkService: Sendable {
             return .failure(NetworkError.unknown(error))
         }
     }
+
+    public func fetchAppUpdate(appId: String, version: String) async -> Result<Components.Schemas.Version, Error> {
+        do {
+            let response = try await client.getAppUpdate(.init(path: .init(id: appId, version: version)))
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(body):
+                    return .success(body.version)
+                }
+            default:
+                return .failure(NetworkError.unexpectedStatusCode)
+            }
+        } catch {
+            return .failure(NetworkError.unknown(error))
+        }
+    }
+
+    public func fetchAppUpdates(appId: String) async -> Result<[Components.Schemas.Version], Error> {
+        do {
+            let response = try await client.getAppUpdates(.init(path: .init(id: appId)))
+            switch response {
+            case let .ok(okResponse):
+                switch okResponse.body {
+                case let .json(body):
+                    return .success(body.versions)
+                }
+            default:
+                return .failure(NetworkError.unexpectedStatusCode)
+            }
+        } catch {
+            return .failure(NetworkError.unknown(error))
+        }
+    }
 }
