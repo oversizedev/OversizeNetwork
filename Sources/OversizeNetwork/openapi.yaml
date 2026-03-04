@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OversizeAPI
-  version: 1.11.1
+  version: 1.12.0
   description: |-
     # OversizeAPI
 
@@ -206,6 +206,7 @@ paths:
         - apps
       parameters:
         - $ref: '#/components/parameters/AppId'
+        - $ref: '#/components/parameters/Platforms'
       responses:
         '200':
           $ref: '#/components/responses/VersionsResponse'
@@ -633,7 +634,7 @@ components:
       properties:
         id:
           type: string
-          example: 0
+          example: '0'
         type:
           type: string
           example: default
@@ -672,7 +673,7 @@ components:
       properties:
         id:
           type: string
-          example: 0
+          example: '0'
         type:
           type: string
           example: grid
@@ -727,13 +728,21 @@ components:
     Version:
       type: object
       required:
+        - id
         - version
-        - features
+        - releasedAt
       properties:
+        id:
+          type: integer
+          example: 1
         version:
           type: string
           description: Version identifier (semver)
           example: 2.1.0
+        releasedAt:
+          type: string
+          format: date-time
+          example: '2025-08-15T10:30:00Z'
         whatsNew:
           type: string
           description: Summary of changes in this version
@@ -917,7 +926,7 @@ components:
                     - iOS
                     - macOS
                   createdAt: '2022-08-15T10:30:00Z'
-                  updatedAt: '2025-04-02T15:35:22Z'
+                  releasedAt: '2025-04-02T15:35:22Z'
                 - id: '1842391042'
                   name: Weight Tracker
                   title: Track your weight
@@ -929,7 +938,7 @@ components:
                   platforms:
                     - iOS
                   createdAt: '2023-01-10T08:45:00Z'
-                  updatedAt: '2025-04-01T16:20:45Z'
+                  releasedAt: '2025-04-01T16:20:45Z'
     BadRequestResponse:
       description: Bad request
       content:
@@ -1060,6 +1069,7 @@ components:
                 features: []
               sections:
                 - id: premium
+                  type: grid
                   title: Premium Features
                   subtitle: Unlock all features
                   features:
@@ -1067,6 +1077,7 @@ components:
                       title: No Ads
                       textSize: medium
                       textAlignment: center
+                      screenshots: []
     AdsResponse:
       description: List of app ads
       content:
@@ -1131,7 +1142,9 @@ components:
                   $ref: '#/components/schemas/Version'
             example:
               versions:
-                - version: 2.1.0
+                - id: 6443709281
+                  version: 2.1.0
+                  releasedAt: '2022-12-31T00:00:00Z'
                   whatsNew: Performance improvements and bug fixes
                   features:
                     - id: '1'
@@ -1139,7 +1152,9 @@ components:
                       textSize: medium
                       textAlignment: center
                       screenshots: []
-                - version: 2.0.0
+                - id: 6443709280
+                  version: 2.0.0
+                  releasedAt: '2022-06-01T00:00:00Z'
                   whatsNew: Major redesign with new features
                   features: []
     VersionResponse:
@@ -1157,7 +1172,9 @@ components:
                 description: Single version details
             example:
               version:
+                id: 6443709281
                 version: 2.1.0
+                releasedAt: '2022-12-31T00:00:00Z'
                 whatsNew: Performance improvements and bug fixes
                 features:
                   - id: '1'
@@ -1187,8 +1204,10 @@ components:
                 - premium_monthly
                 - premium_lifetime
               banner:
+                id: 1
+                badge: Special Offer
                 title: Unlock Premium Features
-                subtitle: Get full access to all features
+                description: Get full access to all features
     FeatureResponse:
       description: Feature
       content:
