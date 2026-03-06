@@ -212,10 +212,12 @@ extension APIProtocol {
     /// - Remark: Generated from `#/paths//v1/apps/{id}/updates/get(getAppUpdates)`.
     public func getAppUpdates(
         path: Operations.getAppUpdates.Input.Path,
+        query: Operations.getAppUpdates.Input.Query = .init(),
         headers: Operations.getAppUpdates.Input.Headers = .init()
     ) async throws -> Operations.getAppUpdates.Output {
         try await getAppUpdates(Operations.getAppUpdates.Input(
             path: path,
+            query: query,
             headers: headers
         ))
     }
@@ -797,10 +799,14 @@ public enum Components {
         }
         /// - Remark: Generated from `#/components/schemas/Version`.
         public struct Version: Codable, Hashable, Sendable {
+            /// - Remark: Generated from `#/components/schemas/Version/id`.
+            public var id: Swift.Int
             /// Version identifier (semver)
             ///
             /// - Remark: Generated from `#/components/schemas/Version/version`.
             public var version: Swift.String
+            /// - Remark: Generated from `#/components/schemas/Version/releasedAt`.
+            public var releasedAt: Foundation.Date
             /// Summary of changes in this version
             ///
             /// - Remark: Generated from `#/components/schemas/Version/whatsNew`.
@@ -808,24 +814,32 @@ public enum Components {
             /// Features introduced or updated in this version
             ///
             /// - Remark: Generated from `#/components/schemas/Version/features`.
-            public var features: [Components.Schemas.Feature]
+            public var features: [Components.Schemas.Feature]?
             /// Creates a new `Version`.
             ///
             /// - Parameters:
+            ///   - id:
             ///   - version: Version identifier (semver)
+            ///   - releasedAt:
             ///   - whatsNew: Summary of changes in this version
             ///   - features: Features introduced or updated in this version
             public init(
+                id: Swift.Int,
                 version: Swift.String,
+                releasedAt: Foundation.Date,
                 whatsNew: Swift.String? = nil,
-                features: [Components.Schemas.Feature]
+                features: [Components.Schemas.Feature]? = nil
             ) {
+                self.id = id
                 self.version = version
+                self.releasedAt = releasedAt
                 self.whatsNew = whatsNew
                 self.features = features
             }
             public enum CodingKeys: String, CodingKey {
+                case id
                 case version
+                case releasedAt
                 case whatsNew
                 case features
             }
@@ -3287,6 +3301,21 @@ public enum Operations {
                 }
             }
             public var path: Operations.getAppUpdates.Input.Path
+            /// - Remark: Generated from `#/paths/v1/apps/{id}/updates/GET/query`.
+            public struct Query: Sendable, Hashable {
+                /// Filter by platforms
+                ///
+                /// - Remark: Generated from `#/paths/v1/apps/{id}/updates/GET/query/platforms`.
+                public var platforms: Components.Parameters.Platforms?
+                /// Creates a new `Query`.
+                ///
+                /// - Parameters:
+                ///   - platforms: Filter by platforms
+                public init(platforms: Components.Parameters.Platforms? = nil) {
+                    self.platforms = platforms
+                }
+            }
+            public var query: Operations.getAppUpdates.Input.Query
             /// - Remark: Generated from `#/paths/v1/apps/{id}/updates/GET/header`.
             public struct Headers: Sendable, Hashable {
                 /// Client application version
@@ -3333,12 +3362,15 @@ public enum Operations {
             ///
             /// - Parameters:
             ///   - path:
+            ///   - query:
             ///   - headers:
             public init(
                 path: Operations.getAppUpdates.Input.Path,
+                query: Operations.getAppUpdates.Input.Query = .init(),
                 headers: Operations.getAppUpdates.Input.Headers = .init()
             ) {
                 self.path = path
+                self.query = query
                 self.headers = headers
             }
         }

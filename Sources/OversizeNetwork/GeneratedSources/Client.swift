@@ -1143,6 +1143,13 @@ public struct Client: APIProtocol {
                     name: "App-Store-ID",
                     value: input.headers.App_hyphen_Store_hyphen_ID
                 )
+                try converter.setQueryItemAsURI(
+                    in: &request,
+                    style: .form,
+                    explode: true,
+                    name: "platforms",
+                    value: input.query.platforms
+                )
                 converter.setAcceptHeader(
                     in: &request.headerFields,
                     contentTypes: input.headers.accept
