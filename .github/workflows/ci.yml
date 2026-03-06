@@ -4,19 +4,39 @@ on:
   push:
     branches: ["main"]
   workflow_dispatch:
-  
+
 jobs:
+
+  generate:
+    name: Generate Network
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate OpenAPI code
+        run: swift package plugin --allow-writing-to-package-directory generate-code-from-openapi
+
+      - name: Commit generated sources
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Sources/OversizeNetwork/GeneratedSources/
+          git diff --staged --quiet || git commit -m "chore: regenerate OpenAPI sources"
+          git push
 
   build-swiftpm:
     name: Build SwiftPM
+    needs: generate
     uses: oversizedev/GithubWorkflows/.github/workflows/build-swiftpm.yml@main
     with:
       package: "OversizeNetwork"
     secrets: inherit
-    
+
   bump:
     name: Bump version
     needs: build-swiftpm
     uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
     secrets: inherit
-    
