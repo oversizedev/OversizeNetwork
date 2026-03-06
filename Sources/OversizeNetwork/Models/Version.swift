@@ -3,4 +3,4 @@
 // Version.swift, created on 31.03.2025
 //
 
-extension Components.Schemas.Version: Identifiable { }
+extension Components.Schemas.Version: Identifiable {}

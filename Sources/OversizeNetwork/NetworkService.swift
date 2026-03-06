@@ -36,7 +36,7 @@ public struct NetworkService: Sendable {
         let headersStore = RequestHeadersStore(headers: headers)
         self.init(
             underlyingClient: Client(
-                serverURL: try! Servers.Server1.url(),
+                serverURL: APIServer.stored.url,
                 transport: Self.makeTransport(),
                 middlewares: [RequestHeadersMiddleware(store: headersStore)],
             ),
