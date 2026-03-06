@@ -12,7 +12,7 @@ let commonDependencies: [PackageDescription.Package.Dependency] = [
 ]
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
-    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "0.1.0")),
+    .package(url: "https://github.com/oversizedev/OversizeCore.git", .upToNextMajor(from: "1.3.0")),
 ]
 
 let localDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [
