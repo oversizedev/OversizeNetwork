@@ -1,15 +1,23 @@
-name: CI - Push
+name: CI
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - '**'
+    tags:
+      - "*.*.*"
   workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
 
   generate:
     name: Generate Network
     runs-on: macos-latest
+    if:  github.event_name != 'push' || !startsWith(github.ref, 'refs/tags/')
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,5 +46,12 @@ jobs:
   bump:
     name: Bump version
     needs: build-swiftpm
+    if: github.ref == 'refs/heads/main'
     uses: oversizedev/GithubWorkflows/.github/workflows/bump.yml@main
+    secrets: inherit
+
+  release:
+    name: Create Release
+    if: github.ref != 'refs/heads/main' && startsWith(github.ref, 'refs/tags/')
+    uses: oversizedev/GithubWorkflows/.github/workflows/release.yml@main
     secrets: inherit
