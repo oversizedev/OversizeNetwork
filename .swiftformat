@@ -1,3 +1,4 @@
 --swiftversion 6.1
 --disable preferKeyPath
 --ifdef no-indent
+--exclude Sources/OversizeNetwork/GeneratedSources

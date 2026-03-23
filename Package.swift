@@ -19,7 +19,8 @@ let localDependencies: [PackageDescription.Package.Dependency] = commonDependenc
     .package(name: "OversizeCore", path: "../OversizeCore"),
 ]
 
-let dependencies: [PackageDescription.Package.Dependency] = FileManager.default.fileExists(atPath: "../OversizeCore") ? localDependencies : remoteDependencies
+let isLocalDev = FileManager.default.fileExists(atPath: "\(NSHomeDirectory())/Developer/Packages/OversizeCore")
+let dependencies: [PackageDescription.Package.Dependency] = isLocalDev ? localDependencies : remoteDependencies
 
 let package = Package(
     name: "OversizeNetwork",
