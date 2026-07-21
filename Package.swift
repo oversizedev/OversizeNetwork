@@ -5,10 +5,10 @@ import Foundation
 import PackageDescription
 
 let commonDependencies: [PackageDescription.Package.Dependency] = [
-    .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMinor(from: "1.10.2")),
-    .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMinor(from: "1.8.2")),
-    .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMinor(from: "1.1.0")),
-    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "2.5.0")),
+    .package(url: "https://github.com/apple/swift-openapi-generator", .upToNextMajor(from: "1.10.2")),
+    .package(url: "https://github.com/apple/swift-openapi-runtime", .upToNextMajor(from: "1.8.2")),
+    .package(url: "https://github.com/apple/swift-openapi-urlsession", .upToNextMajor(from: "1.1.0")),
+    .package(url: "https://github.com/hmlongco/Factory.git", .upToNextMajor(from: "3.0.2")),
 ]
 
 let remoteDependencies: [PackageDescription.Package.Dependency] = commonDependencies + [

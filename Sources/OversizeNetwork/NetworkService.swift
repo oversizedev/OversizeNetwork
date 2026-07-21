@@ -43,9 +43,9 @@ public struct NetworkService: Sendable {
         )
     }
 
-    public func fetchApps() async -> Result<[Components.Schemas.App], Error> {
+    public func fetchApps(platforms: Components.Parameters.Platforms? = nil) async -> Result<[Components.Schemas.App], Error> {
         do {
-            let response = try await client.getApps()
+            let response = try await client.getApps(query: .init(platforms: platforms))
             switch response {
             case let .ok(okResponse):
                 switch okResponse.body {
